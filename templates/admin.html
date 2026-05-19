@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}ผู้ดูแลระบบ - ระบบลงทะเบียนคอร์ส{% endblock %}
+
+{% block content %}
+<div class="admin-header">
+    <h2>แผงควบคุมผู้ดูแล</h2>
+    <span class="badge">ผู้ลงทะเบียนทั้งหมด: {{ total }} คน</span>
+</div>
+
+<div class="admin-grid">
+    <!-- Add Course Form -->
+    <div class="admin-card">
+        <h3>เพิ่มคอร์สใหม่</h3>
+        <form method="POST" action="{{ url_for('add_course') }}">
+            <div class="form-group">
+                <label>ชื่อคอร์ส</label>
+                <input type="text" name="name" placeholder="ชื่อคอร์ส" required>
+            </div>
+            <div class="form-group">
+                <label>คำอธิบาย</label>
+                <textarea name="description" placeholder="รายละเอียดคอร์ส" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label>ราคา (บาท)</label>
+                <input type="number" name="price" placeholder="0" min="0">
+            </div>
+            <button type="submit" class="btn btn-primary">เพิ่มคอร์ส</button>
+        </form>
+    </div>
+
+    <!-- Registrations Table -->
+    <div class="admin-card wide">
+        <h3>รายชื่อผู้ลงทะเบียน</h3>
+        {% if rows %}
+        <div class="table-wrapper">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>ชื่อ-นามสกุล</th>
+                        <th>อีเมล</th>
+                        <th>เบอร์โทร</th>
+                        <th>คอร์ส</th>
+                        <th>วันที่ลงทะเบียน</th>
+                        <th>จัดการ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in rows %}
+                    <tr>
+                        <td>{{ row.id }}</td>
+                        <td>{{ row.name }}</td>
+                        <td>{{ row.email }}</td>
+                        <td>{{ row.phone or '-' }}</td>
+                        <td><span class="tag">{{ row.course_name }}</span></td>
+                        <td>{{ row.created_at[:16] }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('delete_registration', reg_id=row.id) }}"
+                                  onsubmit="return confirm('ยืนยันการลบ?')">
+                                <button type="submit" class="btn btn-danger btn-sm">ลบ</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="empty-state">ยังไม่มีผู้ลงทะเบียน</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

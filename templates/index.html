@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}หน้าแรก - ระบบลงทะเบียนคอร์ส{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>ยินดีต้อนรับสู่ระบบลงทะเบียนคอร์ส</h1>
+    <p>เรียนรู้ทักษะใหม่ๆ กับคอร์สคุณภาพของเรา</p>
+    <a href="{{ url_for('register') }}" class="btn btn-primary">ลงทะเบียนเรียน</a>
+</div>
+
+<section class="courses-section">
+    <h2>คอร์สที่เปิดสอน</h2>
+    <div class="courses-grid">
+        {% for course in courses %}
+        <div class="course-card">
+            <h3>{{ course.name }}</h3>
+            <p>{{ course.description or 'ไม่มีคำอธิบาย' }}</p>
+            <div class="course-footer">
+                <span class="price">฿{{ "{:,}".format(course.price) }}</span>
+                <a href="{{ url_for('register') }}?course={{ course.id }}" class="btn btn-outline">สมัครเรียน</a>
+            </div>
+        </div>
+        {% else %}
+        <p>ยังไม่มีคอร์สเปิดสอนในขณะนี้</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
