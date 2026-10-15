@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ห้องเรียนเกม ม.1 เทอม 2 – โรงเรียนปิยมิตรวิทยา</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;800&family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Kanit,Sarabun,Tahoma,sans-serif;background:#eef3fb;color:#1d2340}
+.app{display:flex;min-height:100vh}
+.side{width:84px;background:linear-gradient(#162447,#0f1a33);color:#cfd8f5;flex-shrink:0;padding:8px 6px;position:sticky;top:0;height:100vh}
+.side a{display:flex;flex-direction:column;align-items:center;font-size:11px;padding:8px 2px;border-radius:12px;color:inherit;text-decoration:none;margin-bottom:4px;cursor:pointer}
+.side a span{font-size:22px}.side a.active{background:linear-gradient(135deg,#ff4f7b,#ff7b54);color:#fff;box-shadow:0 4px 12px #ff4f7b66}
+.side a:hover:not(.active){background:#ffffff14}
+main{flex:1;min-width:0;padding:12px}
+header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:linear-gradient(90deg,#1b2a6b,#5b2c8f,#c2185b);color:#fff;border-radius:18px;padding:12px 16px;box-shadow:0 6px 20px #0003}
+.logo{width:56px;height:56px;border-radius:50%;background:#fff;color:#1b2a6b;font-weight:800;display:grid;place-items:center;font-size:16px;border:4px solid #ffd54f}
+.ttl{flex:1;min-width:220px}.ttl h1{margin:0;font-size:26px;text-shadow:0 2px 0 #0004}.ttl div{font-size:13px;opacity:.9}
+.stat{background:#ffffffee;color:#1d2340;border-radius:14px;padding:6px 12px;display:flex;align-items:center;gap:8px;font-weight:600}
+.pbar{width:170px;height:12px;background:#dde3f0;border-radius:8px;overflow:hidden}.pbar i{display:block;height:100%;background:linear-gradient(90deg,#43c76b,#9be15d);transition:width .6s}
+.btn{border:0;border-radius:12px;padding:8px 14px;font:inherit;font-weight:600;cursor:pointer}
+.reset{background:#fff3;color:#fff}
+.mapwrap{overflow-x:auto;margin-top:12px;border-radius:18px;box-shadow:0 6px 20px #0002}
+.map{position:relative;min-width:980px;aspect-ratio:2/1;overflow:hidden;background:linear-gradient(#8fd3ff 0%,#c8ecff 35%,#9be38a 36%,#5cbf60 100%)}
+.map .z2bg{position:absolute;right:0;top:0;bottom:0;width:50%;background:linear-gradient(#7b5ce0 0%,#e58fc6 35%,transparent 36%)}
+.river{position:absolute;left:0;right:0;top:56%;height:12%;background:linear-gradient(90deg,#3fa9f5,#69c9ff,#3fa9f5);opacity:.75;border-radius:50%}
+.deco{position:absolute;font-size:34px;pointer-events:none;filter:drop-shadow(0 3px 2px #0003)}
+.zone{position:absolute;top:2%;padding:6px 14px;border-radius:12px;color:#fff;font-weight:800;font-size:16px;text-align:center;box-shadow:0 4px 0 #0003}
+.zone small{display:block;font-weight:400;font-size:11px}
+svg.path{position:absolute;inset:0;width:100%;height:100%}
+.node{position:absolute;transform:translate(-50%,-50%);text-align:center;cursor:pointer;width:110px}
+.node .c{width:54px;height:54px;margin:auto;border-radius:50%;display:grid;place-items:center;font-size:22px;font-weight:800;color:#fff;border:4px solid #fff;box-shadow:0 5px 0 #0004;transition:transform .15s}
+.node:hover .c{transform:scale(1.12)}
+.node.done .c{background:linear-gradient(#43c76b,#1f8f45)}.node.open .c{background:linear-gradient(#ffb300,#ff6f00);animation:pulse 1.4s infinite}
+.node.locked .c{background:#8d97ad;cursor:not-allowed}.node.locked{cursor:not-allowed}
+@keyframes pulse{50%{box-shadow:0 0 0 10px #ffb30055,0 5px 0 #0004}}
+.node .lb{background:#fffffff0;border-radius:8px;font-size:11px;line-height:1.2;padding:3px 4px;margin-top:3px;font-weight:600}
+.node .lb small{display:block;font-weight:400;color:#555;font-size:10px}
+.stars{color:#ffc107;font-size:13px;letter-spacing:-1px;text-shadow:0 1px 0 #0005}.stars .off{color:#c9ced8}
+.boss .c{width:84px;height:84px;font-size:40px;background:linear-gradient(#e53935,#7b1fa2)!important;border-color:#ffd54f}
+.boss .lb{background:#b71c1c;color:#fff}.boss .lb small{color:#ffe082}
+.boss.locked .c{filter:grayscale(.8)}
+.table{display:grid;grid-template-columns:1fr 1fr 1.6fr;gap:12px;margin-top:12px}
+.unit{background:#fff;border-radius:16px;padding:10px;border-top:6px solid}
+.unit h3{margin:0 0 8px;font-size:15px}
+.row{display:flex;align-items:center;gap:8px;padding:6px;border-bottom:1px solid #eef;font-size:13px;cursor:pointer}
+.row:hover{background:#f5f7ff}.row b{width:20px}.row .t{flex:1}.row .t small{display:block;color:#777}
+.badge{font-size:11px;padding:2px 8px;border-radius:8px;white-space:nowrap}
+.b-done{background:#dff6e5;color:#1f8f45}.b-cur{background:#fff1cc;color:#c77700}.b-no{background:#eceff4;color:#778}
+.u3{display:grid;grid-template-columns:1fr 1fr;column-gap:10px}
+.modal{position:fixed;inset:0;background:#0b1030b0;display:none;align-items:center;justify-content:center;z-index:50;padding:10px}
+.modal.show{display:flex}
+.card{background:#fff;border-radius:22px;max-width:720px;width:100%;max-height:94vh;overflow:auto;box-shadow:0 20px 60px #0006}
+.card .top{padding:16px 20px;color:#fff;background:linear-gradient(120deg,#1e88e5,#7c4dff);border-radius:22px 22px 0 0;position:relative}
+.card .top h2{margin:0;font-size:24px}.card .x{position:absolute;right:14px;top:12px;background:#fff3;color:#fff;font-size:18px}
+.card .body{padding:16px 20px}
+.box{border-radius:14px;padding:10px 14px;margin-bottom:10px}
+.box h4{margin:0 0 6px}.box ul{margin:0;padding-left:20px;font-family:Sarabun,Kanit,sans-serif}
+.g1{background:#e8f5e9}.g2{background:#e3f2fd}.g3{background:#fff8e1}
+.vocab{display:flex;flex-wrap:wrap;gap:6px}.vocab span{background:#fff;border:2px solid #ffd54f;border-radius:10px;padding:3px 8px;font-size:13px}
+.go{background:linear-gradient(#ff7043,#e64a19);color:#fff;font-size:18px;width:100%;padding:12px;box-shadow:0 4px 0 #a33}
+.q{font-size:19px;margin:8px 0 12px}.opts{display:grid;gap:8px}
+.opt{text-align:left;background:#f1f4ff;border:2px solid #d5dcf5;font-size:16px}
+.opt:hover:not(:disabled){background:#e3e9ff}.opt.ok{background:#c8f7d2;border-color:#2e7d32}.opt.bad{background:#ffd6d6;border-color:#c62828}
+.qp{display:flex;justify-content:space-between;color:#666;font-size:14px}
+.res{text-align:center}.res .big{font-size:56px;color:#ffc107}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:60}
+@media(max-width:900px){.table{grid-template-columns:1fr}.u3{grid-template-columns:1fr}}
+@media(max-width:640px){.app{flex-direction:column}.side{width:100%;height:auto;position:static;display:flex;overflow-x:auto;padding:4px}.side a{min-width:64px;margin:0 2px}
+.ttl h1{font-size:20px}.pbar{width:110px}main{padding:8px}}
+.row .t small.desc{color:#1e5bb8;font-family:Sarabun,Kanit,sans-serif;font-size:12px}.row .t small.desc2{color:#8a6d00;font-size:11px}.side a.soon{opacity:.45;cursor:default}
+</style><style>.subj{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:14px}
+.sc{display:block;text-decoration:none;color:#fff;border-radius:20px;padding:18px;box-shadow:0 6px 20px #0003;transition:transform .15s;cursor:pointer}.sc:hover{transform:translateY(-4px)}
+.sc .ic{font-size:46px}.sc h2{margin:6px 0 2px;font-size:24px}.sc p{margin:0 0 10px;font-family:Sarabun,Kanit,sans-serif;font-size:14px;opacity:.95}
+.sc .pbar{width:100%;background:#ffffff55}.sc .m{display:flex;justify-content:space-between;font-weight:600;margin-top:6px}
+.panel{background:#fff;border-radius:16px;padding:12px 16px;margin-top:14px;box-shadow:0 3px 10px #0001}.panel h3{margin:0 0 8px}
+.how ol{margin:4px 0;font-family:Sarabun,Kanit,sans-serif}
+.frm{display:grid;grid-template-columns:2fr 1fr 1fr .8fr auto;gap:8px}.frm input{font:inherit;padding:8px 10px;border:2px solid #d5dcf5;border-radius:10px;min-width:0}
+.plist{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}.pchip{background:#f1f4ff;border:2px solid #d5dcf5;border-radius:12px;padding:6px 10px;cursor:pointer;font-weight:600}.pchip.me{background:#fff1cc;border-color:#ffb300}
+.cur{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:18px}
+table.sb{width:100%;border-collapse:collapse;font-size:13px}table.sb th,table.sb td{padding:6px;border-bottom:1px solid #eef;text-align:center}table.sb th{background:#f5f7ff}table.sb td.l{text-align:left}
+table.sb tr.click{cursor:pointer}table.sb tr.click:hover{background:#fffbe6}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}.tabs .btn{background:#eef1fb}.tabs .btn.on{background:#1e88e5;color:#fff}
+.adm{background:#fdecea;color:#b71c1c}.small{font-size:12px;color:#777}
+@media(max-width:640px){.frm{grid-template-columns:1fr 1fr}.frm .btn{grid-column:span 2}}</style></head><body>
+<div class="app">
+<nav class="side">
+<a href="index.html" class="active"><span>🏠</span>หน้าหลัก</a><a href="thai-m1.html" ><span>📖</span>ภาษาไทย</a><a href="english-m1.html" ><span>🇬🇧</span>ภาษาอังกฤษ</a><a href="science-m1.html" ><span>🔬</span>วิทยาศาสตร์</a><a href="math-m1.html" ><span>➗</span>คณิตศาสตร์</a><a href="social-m1.html" ><span>🌏</span>สังคมศึกษา</a><a class="soon"><span>🏆</span>อันดับ</a><a class="soon"><span>⚙️</span>ตั้งค่า</a>
+</nav>
+<main>
+<header><div class="logo">ม.1</div><div class="ttl"><h1>ห้องเรียนเกม ม.1 เทอม 2</h1><div>โรงเรียนปิยมิตรวิทยา ฝ่ายมัธยม · ลงชื่อผู้เล่น เลือกวิชา แล้วผ่านทีละฐาน เก็บดาว ⭐ และเหรียญ 🪙</div></div>
+<div class="stat">👥 ผู้เล่น <span id="np">0</span></div><div class="stat" id="mestat">👤 ยังไม่ได้เลือกผู้เล่น</div></header>
+<div class="panel" id="who"><h3>👤 ผู้เล่น</h3><div class="cur" id="cur"></div>
+<div id="regbox" style="margin-top:10px"><b>📝 ลงทะเบียนผู้เล่นใหม่</b>
+<form class="frm" id="reg" style="margin-top:6px"><input id="f_name" placeholder="ชื่อ-นามสกุล *" required><input id="f_nick" placeholder="ชื่อเล่น"><input id="f_cls" placeholder="ชั้น/ห้อง เช่น ม.1/2"><input id="f_no" placeholder="เลขที่" inputmode="numeric"><button class="btn go" style="width:auto;font-size:16px;padding:8px 14px">✅ ลงทะเบียน</button></form>
+<div id="regmsg" class="small"></div></div>
+<div style="margin-top:10px"><b>🔄 เลือกผู้เล่นที่ลงทะเบียนแล้ว</b> <input id="pf" placeholder="🔍 ค้นหาชื่อ/ห้อง" style="font:inherit;padding:4px 8px;border:2px solid #d5dcf5;border-radius:10px"><div class="plist" id="plist"></div></div></div>
+<div class="subj" id="subj"></div>
+<div class="panel"><h3>🏆 ตารางคะแนน <span class="small" id="upd"></span></h3>
+<div class="tabs" id="tabs"></div><div style="overflow-x:auto" id="board"></div></div>
+<div class="panel"><h3>🔍 ผลรายฐาน <select id="kid" style="font:inherit;padding:4px 8px;border-radius:10px"></select></h3><div style="overflow-x:auto" id="drill"></div></div>
+<div class="panel"><h3>👩‍🏫 สำหรับครู</h3><div id="admin"><button class="btn adm" id="alogin">🔑 เข้าโหมดครู (ใส่ PIN)</button></div></div>
+<div class="panel how"><h3>📋 วิธีเล่น</h3><ol><li>ลงทะเบียน (หรือเลือกชื่อตัวเอง) ก่อนเข้าเล่น</li><li>แต่ละฐานสุ่ม 10 ข้อ ตอบถูกอย่างน้อย 5 ข้อเพื่อผ่าน ฐานถัดไปจึงจะเปิด (ข้ามฐานไม่ได้)</li><li>ผ่านครบทุกฐานในช่วง แล้วสู้บอส 👹 เพื่อปลดล็อกช่วงถัดไป</li></ol></div>
+</main></div>
+<script src="config.js"></script><script src="api.js"></script><script src="subjects.js"></script>
+<script>
+let PL=[],SC=[],PID=localStorage.getItem("piyamit_pid"),TAB="all",PIN=null;
+const $=id=>document.getElementById(id),esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c]);
+const label=p=>`${esc(p.nick||p.name)}${p.cls?" · "+esc(p.cls):""}${p.no?" #"+esc(p.no):""}`;
+const fmt=t=>t?new Date(t).toLocaleString("th-TH",{dateStyle:"short",timeStyle:"short"}):"-";
+function agg(pid,k){const S=SUBJECTS.find(s=>s.k===k);const rs=SC.filter(r=>r.pid===pid&&r.subj===k);let passed=0,stars=0,coins=0,att=0,last=0;
+ rs.forEach(r=>{if(/^\d+$/.test(r.base)){if(r.stars>0)passed++;stars+=r.stars}coins+=r.coins||0;att+=r.att;last=Math.max(last,r.last||0)});return{passed,stars,coins,att,last,N:S.b.length}}
+function setMe(id){PID=id;if(id)localStorage.setItem("piyamit_pid",id);else localStorage.removeItem("piyamit_pid");draw()}
+function draw(){
+ const me=PL.find(p=>p.id===PID);if(PID&&!me&&PL.length)setMe(null);
+ $("np").textContent=PL.length;$("mestat").innerHTML=me?"👤 "+label(me):"👤 ยังไม่ได้เลือกผู้เล่น";
+ $("cur").innerHTML=me?`ตอนนี้เล่นในชื่อ <b>${esc(me.name)}</b> (${label(me)}) <button class="btn" id="sw" style="background:#eef1fb">🔄 เปลี่ยนผู้เล่น</button>`:`<span style="color:#c62828;font-weight:600">⚠️ กรุณาลงทะเบียนหรือเลือกชื่อก่อนเข้าเล่น</span>`;
+ if($("sw"))$("sw").onclick=()=>setMe(null);
+ const f=$("pf").value.trim().toLowerCase();
+ $("plist").innerHTML=PL.filter(p=>!f||(p.name+p.nick+p.cls).toLowerCase().includes(f)).map(p=>`<span class="pchip ${p.id===PID?"me":""}" data-p="${p.id}">${label(p)}<br><small style="font-weight:400">${esc(p.name)}</small></span>`).join("")||'<span class="small">ยังไม่มีผู้เล่น</span>';
+ $("plist").querySelectorAll("[data-p]").forEach(e=>e.onclick=()=>{setMe(e.dataset.p);window.scrollTo({top:$("subj").offsetTop-10,behavior:"smooth"})});
+ $("subj").innerHTML=SUBJECTS.map(s=>{const a=me?agg(me.id,s.k):{passed:0,stars:0,N:s.b.length};const pc=Math.round(a.passed/a.N*100);
+  return `<a class="sc" data-h="${s.h}" style="background:${s.c}"><div class="ic">${s.e}</div><h2>${s.n} ม.1</h2><p>${s.d} · ${s.b.length} ฐาน + บอส</p><div class="pbar"><i style="width:${pc}%"></i></div><div class="m"><span>${me?`${a.passed}/${a.N} ฐาน (${pc}%)`:"ลงชื่อก่อนเล่น"}</span><span>⭐ ${a.stars}/${a.N*3}</span></div></a>`}).join("");
+ $("subj").querySelectorAll("[data-h]").forEach(e=>e.onclick=()=>{if(!PID){alert("กรุณาลงทะเบียนหรือเลือกชื่อผู้เล่นก่อน");$("f_name").focus();return}location.href=e.dataset.h});
+ // ranking
+ $("tabs").innerHTML=[["all","🏅 รวมทุกวิชา"],...SUBJECTS.map(s=>[s.k,s.e+" "+s.n])].map(([k,n])=>`<button class="btn ${TAB===k?"on":""}" data-t="${k}">${n}</button>`).join("");
+ $("tabs").querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{TAB=b.dataset.t;draw()});
+ const subs=TAB==="all"?SUBJECTS:SUBJECTS.filter(s=>s.k===TAB);
+ const rows=PL.map(p=>{const per=subs.map(s=>agg(p.id,s.k));const t=per.reduce((x,a)=>({passed:x.passed+a.passed,stars:x.stars+a.stars,coins:x.coins+a.coins,att:x.att+a.att,last:Math.max(x.last,a.last)}),{passed:0,stars:0,coins:0,att:0,last:0});return{p,per,t}})
+  .sort((a,b)=>b.t.stars-a.t.stars||b.t.passed-a.t.passed||b.t.coins-a.t.coins);
+ $("board").innerHTML=`<table class="sb" id="sbt"><tr><th>อันดับ</th><th>ชื่อ</th><th>ห้อง</th><th>เลขที่</th>${subs.map(s=>`<th>${s.e} ฐานที่ผ่าน</th><th>${s.e} ⭐</th>`).join("")}<th>รวม ⭐</th><th>🪙</th><th>ครั้งที่เล่น</th><th>เล่นล่าสุด</th>${PIN?"<th>ลบ</th>":""}</tr>`+
+  rows.map((r,i)=>`<tr class="click" data-k="${r.p.id}"><td>${["🥇","🥈","🥉"][i]||i+1}</td><td class="l"><b>${esc(r.p.nick||"")}</b> ${esc(r.p.name)}</td><td>${esc(r.p.cls)}</td><td>${esc(r.p.no)}</td>${r.per.map(a=>`<td>${a.passed}/${a.N}</td><td>${a.stars}</td>`).join("")}<td><b>${r.t.stars}</b></td><td>${r.t.coins}</td><td>${r.t.att}</td><td>${fmt(r.t.last)}</td>${PIN?`<td><button class="btn adm" data-del="${r.p.id}">🗑️</button></td>`:""}</tr>`).join("")+"</table>";
+ $("board").querySelectorAll("tr[data-k]").forEach(t=>t.onclick=e=>{if(e.target.dataset.del)return;$("kid").value=t.dataset.k;drill();$("kid").scrollIntoView({behavior:"smooth"})});
+ $("board").querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{const p=PL.find(x=>x.id===b.dataset.del);if(confirm(`ลบ "${p.name}" และคะแนนทั้งหมด? (ย้อนกลับไม่ได้)`))api("admin_delete",{pin:PIN,pid:p.id}).then(refresh).catch(e=>alert(e.message))});
+ const kv=$("kid").value;$("kid").innerHTML='<option value="">— เลือกนักเรียน —</option>'+PL.map(p=>`<option value="${p.id}">${label(p)} – ${esc(p.name)}</option>`).join("");$("kid").value=PL.some(p=>p.id===kv)?kv:(PID||"");drill();
+}
+function drill(){const pid=$("kid").value;if(!pid){$("drill").innerHTML='<span class="small">เลือกนักเรียนเพื่อดูคะแนนรายฐาน</span>';return}
+ $("drill").innerHTML=SUBJECTS.map(s=>{const rs=Object.fromEntries(SC.filter(r=>r.pid===pid&&r.subj===s.k).map(r=>[r.base,r]));
+  const line=(id,name)=>{const r=rs[id];return `<tr><td class="l">${name}</td><td>${r?`${r.best}/${r.total}`:"-"}</td><td>${r?`${r.lastScore}/${r.total}`:"-"}</td><td style="color:#ffb300">${r?"★".repeat(r.stars)+"☆".repeat(3-r.stars):"-"}</td><td>${r?r.att:0}</td><td>${r?fmt(r.last):"-"}</td><td>${r?(r.stars?"✅ ผ่าน":"❌ ยังไม่ผ่าน"):"⏳ ยังไม่เล่น"}</td></tr>`};
+  return `<h4 style="margin:10px 0 4px">${s.e} ${s.n}</h4><table class="sb"><tr><th class="l">ฐาน</th><th>คะแนนดีสุด</th><th>ครั้งล่าสุด</th><th>ดาว</th><th>จำนวนครั้ง</th><th>เล่นล่าสุด</th><th>สถานะ</th></tr>${s.b.map((n,i)=>line(String(i),`${i+1}. ${esc(n)}`)).join("")}${s.boss.map((b,i)=>line(b,`👹 บอส ${s.boss.length>1?i+1:""}`)).join("")}</table>`}).join("")}
+$("kid").onchange=drill;$("pf").oninput=draw;
+$("reg").onsubmit=e=>{e.preventDefault();const d={name:$("f_name").value,nick:$("f_nick").value,cls:$("f_cls").value,no:$("f_no").value};
+ api("register",d).then(r=>{$("regmsg").textContent=r.existed?`ℹ️ มีชื่อ "${r.player.name}" ห้อง ${r.player.cls||"-"} อยู่แล้ว — เลือกเป็นผู้เล่นคนนี้ให้แล้ว (ถ้าเป็นคนละคน กรุณาใส่ชื่อ-นามสกุลเต็ม)`:`✅ ลงทะเบียน "${r.player.name}" เรียบร้อย`;$("reg").reset();PID=r.player.id;localStorage.setItem("piyamit_pid",PID);refresh()}).catch(e=>$("regmsg").textContent="⚠️ "+e.message)};
+function csv(){const H=["ชื่อ","ชื่อเล่น","ชั้น/ห้อง","เลขที่","วิชา","ฐาน","คะแนนดีสุด","เต็ม","ครั้งล่าสุด","ดาว","จำนวนครั้ง","เล่นล่าสุด"];const L=[H];
+ PL.forEach(p=>SUBJECTS.forEach(s=>[...s.b.map((n,i)=>[String(i),`${i+1}. ${n}`]),...s.boss.map((b,i)=>[b,"บอส "+(i+1)])].forEach(([id,n])=>{const r=SC.find(x=>x.pid===p.id&&x.subj===s.k&&x.base===id);
+  L.push([p.name,p.nick,p.cls,p.no,s.n,n,r?r.best:"",r?r.total:"",r?r.lastScore:"",r?r.stars:"",r?r.att:0,r?fmt(r.last):""])})));
+ const t="\ufeff"+L.map(r=>r.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\r\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/csv"}));a.download="คะแนน-ม1-"+new Date().toISOString().slice(0,10)+".csv";a.click()}
+function adminUI(){$("admin").innerHTML=PIN?`<button class="btn" style="background:#e8f5e9" id="csv">⬇️ ดาวน์โหลด CSV (รายฐานทุกคน)</button> <button class="btn adm" id="alogout">ออกจากโหมดครู</button><div class="small">โหมดครู: กดปุ่ม 🗑️ ในตารางคะแนนเพื่อลบนักเรียน</div>`:'<button class="btn adm" id="alogin">🔑 เข้าโหมดครู (ใส่ PIN)</button>';
+ if($("csv"))$("csv").onclick=csv;if($("alogout"))$("alogout").onclick=()=>{PIN=null;adminUI();draw()};
+ if($("alogin"))$("alogin").onclick=()=>{const p=prompt("PIN ครู");if(p)api("admin_check",{pin:p}).then(r=>{if(r.ok){PIN=p;adminUI();draw()}else alert("PIN ไม่ถูกต้อง")})}}
+function refresh(){return api("scoreboard").then(d=>{PL=d.players.sort((a,b)=>(a.cls||"").localeCompare(b.cls||"")||(+a.no||0)-(+b.no||0));SC=d.scores;$("upd").textContent=(window.PIYAMIT_STORAGE==="local"?"· บันทึกในเบราว์เซอร์นี้ · ":"· ")+"อัปเดต "+new Date().toLocaleTimeString("th-TH");draw()}).catch(e=>{$("upd").textContent="· ⚠️ เชื่อมต่อเซิร์ฟเวอร์ไม่ได้"})}
+if(location.search.includes("need=1"))setTimeout(()=>alert("กรุณาลงทะเบียนหรือเลือกชื่อผู้เล่นก่อนเข้าเล่น"),300);
+adminUI();refresh();setInterval(refresh,5000);
+</script></body></html>

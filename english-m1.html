@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ภาษาอังกฤษ ม.1 เทอม 2 – โรงเรียนปิยมิตรวิทยา</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;800&family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Kanit,Sarabun,Tahoma,sans-serif;background:#eef3fb;color:#1d2340}
+.app{display:flex;min-height:100vh}
+.side{width:84px;background:linear-gradient(#162447,#0f1a33);color:#cfd8f5;flex-shrink:0;padding:8px 6px;position:sticky;top:0;height:100vh}
+.side a{display:flex;flex-direction:column;align-items:center;font-size:11px;padding:8px 2px;border-radius:12px;color:inherit;text-decoration:none;margin-bottom:4px;cursor:pointer}
+.side a span{font-size:22px}.side a.active{background:linear-gradient(135deg,#ff4f7b,#ff7b54);color:#fff;box-shadow:0 4px 12px #ff4f7b66}
+.side a:hover:not(.active){background:#ffffff14}
+main{flex:1;min-width:0;padding:12px}
+header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:linear-gradient(90deg,#1b2a6b,#5b2c8f,#c2185b);color:#fff;border-radius:18px;padding:12px 16px;box-shadow:0 6px 20px #0003}
+.logo{width:56px;height:56px;border-radius:50%;background:#fff;color:#1b2a6b;font-weight:800;display:grid;place-items:center;font-size:16px;border:4px solid #ffd54f}
+.ttl{flex:1;min-width:220px}.ttl h1{margin:0;font-size:26px;text-shadow:0 2px 0 #0004}.ttl div{font-size:13px;opacity:.9}
+.stat{background:#ffffffee;color:#1d2340;border-radius:14px;padding:6px 12px;display:flex;align-items:center;gap:8px;font-weight:600}
+.pbar{width:170px;height:12px;background:#dde3f0;border-radius:8px;overflow:hidden}.pbar i{display:block;height:100%;background:linear-gradient(90deg,#43c76b,#9be15d);transition:width .6s}
+.btn{border:0;border-radius:12px;padding:8px 14px;font:inherit;font-weight:600;cursor:pointer}
+.reset{background:#fff3;color:#fff}
+.mapwrap{overflow-x:auto;margin-top:12px;border-radius:18px;box-shadow:0 6px 20px #0002}
+.map{position:relative;min-width:980px;aspect-ratio:2/1;overflow:hidden;background:linear-gradient(#8fd3ff 0%,#c8ecff 35%,#9be38a 36%,#5cbf60 100%)}
+.map .z2bg{position:absolute;right:0;top:0;bottom:0;width:50%;background:linear-gradient(#7b5ce0 0%,#e58fc6 35%,transparent 36%)}
+.river{position:absolute;left:0;right:0;top:56%;height:12%;background:linear-gradient(90deg,#3fa9f5,#69c9ff,#3fa9f5);opacity:.75;border-radius:50%}
+.deco{position:absolute;font-size:34px;pointer-events:none;filter:drop-shadow(0 3px 2px #0003)}
+.zone{position:absolute;top:2%;padding:6px 14px;border-radius:12px;color:#fff;font-weight:800;font-size:16px;text-align:center;box-shadow:0 4px 0 #0003}
+.zone small{display:block;font-weight:400;font-size:11px}
+svg.path{position:absolute;inset:0;width:100%;height:100%}
+.node{position:absolute;transform:translate(-50%,-50%);text-align:center;cursor:pointer;width:110px}
+.node .c{width:54px;height:54px;margin:auto;border-radius:50%;display:grid;place-items:center;font-size:22px;font-weight:800;color:#fff;border:4px solid #fff;box-shadow:0 5px 0 #0004;transition:transform .15s}
+.node:hover .c{transform:scale(1.12)}
+.node.done .c{background:linear-gradient(#43c76b,#1f8f45)}.node.open .c{background:linear-gradient(#ffb300,#ff6f00);animation:pulse 1.4s infinite}
+.node.locked .c{background:#8d97ad;cursor:not-allowed}.node.locked{cursor:not-allowed}
+@keyframes pulse{50%{box-shadow:0 0 0 10px #ffb30055,0 5px 0 #0004}}
+.node .lb{background:#fffffff0;border-radius:8px;font-size:11px;line-height:1.2;padding:3px 4px;margin-top:3px;font-weight:600}
+.node .lb small{display:block;font-weight:400;color:#555;font-size:10px}
+.stars{color:#ffc107;font-size:13px;letter-spacing:-1px;text-shadow:0 1px 0 #0005}.stars .off{color:#c9ced8}
+.boss .c{width:84px;height:84px;font-size:40px;background:linear-gradient(#e53935,#7b1fa2)!important;border-color:#ffd54f}
+.boss .lb{background:#b71c1c;color:#fff}.boss .lb small{color:#ffe082}
+.boss.locked .c{filter:grayscale(.8)}
+.table{display:grid;grid-template-columns:1fr 1fr 1.6fr;gap:12px;margin-top:12px}
+.unit{background:#fff;border-radius:16px;padding:10px;border-top:6px solid}
+.unit h3{margin:0 0 8px;font-size:15px}
+.row{display:flex;align-items:center;gap:8px;padding:6px;border-bottom:1px solid #eef;font-size:13px;cursor:pointer}
+.row:hover{background:#f5f7ff}.row b{width:20px}.row .t{flex:1}.row .t small{display:block;color:#777}
+.badge{font-size:11px;padding:2px 8px;border-radius:8px;white-space:nowrap}
+.b-done{background:#dff6e5;color:#1f8f45}.b-cur{background:#fff1cc;color:#c77700}.b-no{background:#eceff4;color:#778}
+.u3{display:grid;grid-template-columns:1fr 1fr;column-gap:10px}
+.modal{position:fixed;inset:0;background:#0b1030b0;display:none;align-items:center;justify-content:center;z-index:50;padding:10px}
+.modal.show{display:flex}
+.card{background:#fff;border-radius:22px;max-width:720px;width:100%;max-height:94vh;overflow:auto;box-shadow:0 20px 60px #0006}
+.card .top{padding:16px 20px;color:#fff;background:linear-gradient(120deg,#1e88e5,#7c4dff);border-radius:22px 22px 0 0;position:relative}
+.card .top h2{margin:0;font-size:24px}.card .x{position:absolute;right:14px;top:12px;background:#fff3;color:#fff;font-size:18px}
+.card .body{padding:16px 20px}
+.box{border-radius:14px;padding:10px 14px;margin-bottom:10px}
+.box h4{margin:0 0 6px}.box ul{margin:0;padding-left:20px;font-family:Sarabun,Kanit,sans-serif}
+.g1{background:#e8f5e9}.g2{background:#e3f2fd}.g3{background:#fff8e1}
+.vocab{display:flex;flex-wrap:wrap;gap:6px}.vocab span{background:#fff;border:2px solid #ffd54f;border-radius:10px;padding:3px 8px;font-size:13px}
+.go{background:linear-gradient(#ff7043,#e64a19);color:#fff;font-size:18px;width:100%;padding:12px;box-shadow:0 4px 0 #a33}
+.q{font-size:19px;margin:8px 0 12px}.opts{display:grid;gap:8px}
+.opt{text-align:left;background:#f1f4ff;border:2px solid #d5dcf5;font-size:16px}
+.opt:hover:not(:disabled){background:#e3e9ff}.opt.ok{background:#c8f7d2;border-color:#2e7d32}.opt.bad{background:#ffd6d6;border-color:#c62828}
+.qp{display:flex;justify-content:space-between;color:#666;font-size:14px}
+.res{text-align:center}.res .big{font-size:56px;color:#ffc107}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:60}
+@media(max-width:900px){.table{grid-template-columns:1fr}.u3{grid-template-columns:1fr}}
+@media(max-width:640px){.app{flex-direction:column}.side{width:100%;height:auto;position:static;display:flex;overflow-x:auto;padding:4px}.side a{min-width:64px;margin:0 2px}
+.ttl h1{font-size:20px}.pbar{width:110px}main{padding:8px}}
+.row .t small.desc{color:#1e5bb8;font-family:Sarabun,Kanit,sans-serif;font-size:12px}.row .t small.desc2{color:#8a6d00;font-size:11px}.side a.soon{opacity:.45;cursor:default}
+</style></head><body>
+<div class="app">
+<nav class="side">
+<a href="index.html"><span>🏠</span>หน้าหลัก</a><a href="thai-m1.html" ><span>📖</span>ภาษาไทย</a><a href="english-m1.html" class="active"><span>🇬🇧</span>ภาษาอังกฤษ</a><a href="science-m1.html" ><span>🔬</span>วิทยาศาสตร์</a><a href="math-m1.html" ><span>➗</span>คณิตศาสตร์</a><a href="social-m1.html" ><span>🌏</span>สังคมศึกษา</a><a class="soon"><span>🏆</span>อันดับ</a><a class="soon"><span>⚙️</span>ตั้งค่า</a>
+</nav>
+<main>
+<header>
+<div class="logo">ENG</div>
+<div class="ttl"><h1>ภาษาอังกฤษ ม.1 เทอม 2</h1><div>โรงเรียนปิยมิตรวิทยา ฝ่ายมัธยม · สื่อสารในชีวิตประจำวัน | ไวยากรณ์ | คำศัพท์ | การอ่านและเขียน</div></div>
+<div class="stat">ความคืบหน้า <div class="pbar"><i id="pb"></i></div><span id="pt"></span></div>
+<div class="stat">⭐ <span id="st"></span></div>
+<div class="stat">🪙 <span id="co"></span></div>
+<button class="btn reset" id="reset">↺ รีเซ็ต</button>
+</header>
+<div class="mapwrap"><div class="map" id="map"><div class="z2bg"></div><div class="river"></div></div></div>
+<div class="table" id="table"></div>
+</main></div>
+<div class="modal" id="modal"><div class="card" id="card"></div></div>
+<canvas id="confetti"></canvas>
+<script src="config.js"></script><script src="api.js"></script><script>
+const CFG={key:"piyamit_eng_m1_t2_v1"};
+const L=[
+{t:"Greetings & Introductions",th:"การทักทายและแนะนำตัว",e:"👋",v:["Hello","Good morning","Nice to meet you","My name is…","How are you?","Goodbye"],g:"ทักทาย แนะนำตัวเองและผู้อื่นได้อย่างสุภาพ",w:["คำทักทายตามช่วงเวลา","การใช้ I am / My name is","การถามตอบ How are you?"],q:[
+["___ morning, Mr. Smith!",["Good","Well","Nice","Fine"],0],["A: How are you? B: ___",["I'm fine, thank you.","I'm 12.","I'm from Thailand.","Yes, I am."],0],["A: Nice to meet you. B: ___",["Nice to meet you, too.","Goodbye.","Good night.","No, thanks."],0],["What do you say at 8 p.m. before going to bed?",["Good night","Good morning","Good afternoon","Hello"],0],["\"Where are you from?\" — \"I'm ___ Thailand.\"",["from","in","at","on"],0]]},
+{t:"Daily Routines",th:"กิจวัตรประจำวัน",e:"⏰",v:["wake up","brush my teeth","take a shower","have breakfast","go to school","go to bed"],g:"บอกกิจวัตรประจำวันด้วย Present Simple",w:["คำกริยากิจวัตร","Present Simple (เติม s/es)","Adverbs of frequency"],q:[
+["She ___ up at 6 o'clock every day.",["gets","get","getting","got"],0],["I ___ my teeth twice a day.",["brush","brushes","brushing","am brush"],0],["He ___ to school by bus.",["goes","go","going","gos"],0],["Which word means 'เสมอ'?",["always","never","sometimes","seldom"],0],["Tom ___ breakfast at 7 a.m.",["has","have","having","haves"],0]]},
+{t:"My Family",th:"ครอบครัวของฉัน",e:"👨‍👩‍👧",v:["father","mother","brother","sister","grandparents","cousin"],g:"บรรยายสมาชิกในครอบครัวได้",w:["คำศัพท์เครือญาติ","Possessive adjectives","have / has"],q:[
+["My father's mother is my ___.",["grandmother","aunt","sister","cousin"],0],["My mother's brother is my ___.",["uncle","nephew","grandfather","son"],0],["I ___ two brothers.",["have","has","am","is"],0],["This is my sister. ___ name is Mint.",["Her","His","Their","Its"],0],["My aunt's son is my ___.",["cousin","brother","uncle","nephew"],0]]},
+{t:"My School Life",th:"ชีวิตในโรงเรียน",e:"🏫",v:["classroom","library","canteen","subject","timetable","homework"],g:"พูดถึงวิชาเรียนและสถานที่ในโรงเรียน",w:["ชื่อวิชาและสถานที่","There is / There are","คำบุพบทบอกตำแหน่ง"],q:[
+["We borrow books from the ___.",["library","canteen","gym","toilet"],0],["We eat lunch in the ___.",["canteen","library","office","classroom"],0],["There ___ thirty students in my class.",["are","is","am","be"],0],["Which is a school subject?",["Science","Teacher","Pencil","Desk"],0],["My favourite subject ___ English.",["is","are","am","be"],0]]},
+{t:"Free Time & Hobbies",th:"เวลาว่างและงานอดิเรก",e:"🎨",v:["play football","read books","listen to music","draw","swim","play the guitar"],g:"บอกความชอบและงานอดิเรกได้",w:["like/love + V-ing","play + กีฬา / play the + เครื่องดนตรี","การถามถึงงานอดิเรก"],q:[
+["I like ___ comics.",["reading","read","reads","to reading"],0],["She plays ___ piano very well.",["the","a","an","—"],0],["What do you do in your free time? — I ___ badminton.",["play","do","go","make"],0],["He loves ___ in the sea.",["swimming","swim","swims","swam"],0],["Which is NOT a hobby?",["homework","painting","cooking","gardening"],0]]},
+{t:"Food & Drinks",th:"อาหารและเครื่องดื่ม",e:"🍔",v:["rice","noodles","vegetables","juice","some","any"],g:"พูดถึงอาหาร เครื่องดื่ม และปริมาณได้",w:["Countable / Uncountable","some / any","How much / How many"],q:[
+["Is there ___ milk in the fridge?",["any","a","many","an"],0],["How ___ apples do you want?",["many","much","any","some"],0],["I'd like ___ orange, please.",["an","a","some","any"],0],["Which is uncountable?",["water","banana","egg","sandwich"],0],["How ___ sugar do you need?",["much","many","lot","few"],0]]},
+{t:"Shopping",th:"การซื้อของ",e:"🛍️",v:["price","cheap","expensive","size","How much…?","cashier"],g:"ซื้อขายสินค้าและถามราคาได้",w:["How much is/are…?","Comparatives ง่าย ๆ","บทสนทนาในร้านค้า"],q:[
+["___ is this T-shirt? — It's 200 baht.",["How much","How many","What","Which"],0],["How much ___ these shoes?",["are","is","am","be"],0],["This bag is 1,000 baht. That one is 300 baht. That one is ___.",["cheaper","more expensive","bigger","older"],0],["Can I ___ it on? (ลองสวม)",["try","take","make","do"],0],["The opposite of 'expensive' is ___.",["cheap","big","new","nice"],0]]},
+{t:"Places in Town",th:"สถานที่ในเมือง",e:"🏙️",v:["hospital","post office","bank","market","next to","opposite"],g:"บอกทางและตำแหน่งสถานที่ได้",w:["ชื่อสถานที่ในเมือง","Prepositions of place","การบอกทาง (turn left/right)"],q:[
+["You can see a doctor at the ___.",["hospital","bank","bakery","cinema"],0],["You can send a letter at the ___.",["post office","zoo","market","park"],0],["Go straight and turn ___ at the corner.",["left","up","down","on"],0],["The bank is ___ the school and the park. (ระหว่าง)",["between","under","behind","on"],0],["Excuse me, ___ is the museum?",["where","who","when","what time"],0]]},
+{t:"Travel & Transportation",th:"การเดินทางและยานพาหนะ",e:"🚆",v:["by bus","on foot","airport","ticket","train","boat"],g:"บอกวิธีการเดินทางได้",w:["by + ยานพาหนะ / on foot","How do you get to…?","ชื่อยานพาหนะ"],q:[
+["I go to school ___ bus.",["by","on","in","at"],0],["She walks to school. She goes ___ foot.",["on","by","in","with"],0],["You catch a plane at the ___.",["airport","station","port","garage"],0],["How ___ you go to Chiang Mai? — By train.",["do","are","is","does"],0],["Which vehicle travels on water?",["boat","train","taxi","bicycle"],0]]},
+{t:"Weather & Seasons",th:"สภาพอากาศและฤดูกาล",e:"🌦️",v:["sunny","rainy","cloudy","windy","hot","season"],g:"บรรยายสภาพอากาศและฤดูกาลได้",w:["คำคุณศัพท์บอกสภาพอากาศ","What's the weather like?","ฤดูกาลในไทย"],q:[
+["What's the weather ___ today?",["like","as","is","about"],0],["Take an umbrella. It's ___.",["rainy","sunny","hot","dry"],0],["There are three ___ in Thailand: summer, rainy and winter.",["seasons","weathers","months","days"],0],["Snow falls in ___.",["winter","summer","spring","the rainy season"],0],["It is very hot. The opposite of 'hot' is ___.",["cold","warm","sunny","windy"],0]]},
+{t:"Health & Illness",th:"สุขภาพและการเจ็บป่วย",e:"🩺",v:["headache","fever","cough","sore throat","medicine","should"],g:"บอกอาการเจ็บป่วยและให้คำแนะนำได้",w:["อาการเจ็บป่วย","What's the matter?","should / shouldn't"],q:[
+["What's the ___? — I have a headache.",["matter","problem with","wrong is","sick"],0],["You have a fever. You ___ see a doctor.",["should","shouldn't","don't","aren't"],0],["You have a toothache. You should see a ___.",["dentist","vet","pilot","chef"],0],["You ___ eat too much candy.",["shouldn't","should","must to","are"],0],["'ไอ' in English is ___.",["cough","sneeze","fever","cold"],0]]},
+{t:"At the Restaurant",th:"ในร้านอาหาร",e:"🍽️",v:["menu","order","waiter","bill","I'd like…","Would you like…?"],g:"สั่งอาหารในร้านได้อย่างสุภาพ",w:["would like","บทสนทนาสั่งอาหาร","การขอใบเสร็จ"],q:[
+["Waiter: Are you ready to ___?",["order","pay","cook","eat out"],0],["___ like a glass of water, please.",["I'd","I'm","I","I've"],0],["Can I have the ___, please? (ใบเสร็จ)",["bill","menu","table","waiter"],0],["Would you like some dessert? — ___",["Yes, please.","Yes, I do.","No, I don't like.","Here you are."],0],["The person who serves food is a ___.",["waiter","driver","farmer","nurse"],0]]},
+{t:"At the Hotel",th:"ที่โรงแรม",e:"🏨",v:["reception","check in","single room","double room","key","booking"],g:"สื่อสารในโรงแรม จองและเช็คอินได้",w:["คำศัพท์โรงแรม","Can I…? / Could you…?","การจองห้องพัก"],q:[
+["You get your room key at the ___.",["reception","kitchen","lift","pool"],0],["A room for one person is a ___ room.",["single","double","twin","family"],0],["I'd like to ___ a room for two nights.",["book","read","cook","close"],0],["___ you help me with my bags, please?",["Could","Should","Must","Are"],0],["When you leave the hotel, you ___.",["check out","check in","wake up","log in"],0]]},
+{t:"Jobs & Careers",th:"อาชีพ",e:"👩‍⚕️",v:["doctor","teacher","engineer","farmer","police officer","want to be"],g:"บอกอาชีพและความฝันในอนาคตได้",w:["ชื่ออาชีพ","a / an + อาชีพ","want to be…"],q:[
+["A ___ flies planes.",["pilot","chef","farmer","dentist"],0],["My mother is ___ engineer.",["an","a","the","—"],0],["A ___ grows rice and vegetables.",["farmer","nurse","singer","pilot"],0],["What do you want ___ in the future?",["to be","be","being","been"],0],["A ___ cooks food in a restaurant.",["chef","waiter","teacher","vet"],0]]},
+{t:"Holidays & Festivals",th:"วันหยุดและเทศกาล",e:"🎉",v:["Songkran","Loy Krathong","Christmas","New Year","celebrate","in / on"],g:"เล่าเกี่ยวกับเทศกาลไทยและสากลได้",w:["ชื่อเทศกาล","in + เดือน / on + วันที่","Past Simple เบื้องต้น"],q:[
+["Songkran is ___ April.",["in","on","at","by"],0],["Christmas is ___ 25th December.",["on","in","at","to"],0],["During Songkran, people splash ___.",["water","flowers","candles","rice"],0],["Last year we ___ Loy Krathong by the river.",["celebrated","celebrate","celebrating","celebrates"],0],["People float krathongs during ___.",["Loy Krathong","Songkran","Christmas","Halloween"],0]]},
+{t:"Environment",th:"สิ่งแวดล้อม",e:"🌱",v:["recycle","pollution","plastic","save energy","plant trees","rubbish"],g:"พูดถึงปัญหาและการรักษาสิ่งแวดล้อม",w:["คำศัพท์สิ่งแวดล้อม","3Rs: Reduce, Reuse, Recycle","Imperatives (Don't…)"],q:[
+["We should ___ bottles and paper.",["recycle","throw","burn","waste"],0],["___ turn off the lights when you leave the room.",["Please","Don't","Not","No"],0],["Smoke from cars causes air ___.",["pollution","energy","nature","weather"],0],["___ throw rubbish into the river!",["Don't","Do","Please","Let"],0],["Which helps the environment?",["planting trees","using more plastic bags","cutting forests","wasting water"],0]]},
+{t:"Technology",th:"เทคโนโลยี",e:"💻",v:["smartphone","internet","download","password","online","app"],g:"ใช้คำศัพท์เทคโนโลยีและใช้อินเทอร์เน็ตอย่างปลอดภัย",w:["คำศัพท์เทคโนโลยี","can / can't","ความปลอดภัยออนไลน์"],q:[
+["Never share your ___ with strangers.",["password","homework","pencil","shoes"],0],["I ___ use a computer, but I can't fix it.",["can","can't","am","does"],0],["To get an app on your phone, you ___ it.",["download","delete","upload","print"],0],["We send ___ to friends by computer.",["emails","letters by hand","parcels","stamps"],0],["Which device do you use to take photos and make calls?",["smartphone","printer","speaker","keyboard"],0]]},
+{t:"Our World",th:"โลกของเรา",e:"🌍",v:["country","capital","continent","ocean","the biggest","nationality"],g:"เปรียบเทียบประเทศและสถานที่ในโลก",w:["ประเทศ เมืองหลวง สัญชาติ","Comparative & Superlative","ทวีปและมหาสมุทร"],q:[
+["The capital of Japan is ___.",["Tokyo","Seoul","Beijing","Bangkok"],0],["People from Thailand are ___.",["Thai","Thailand","Thailish","Thais people"],0],["The Pacific is the ___ ocean in the world.",["biggest","bigger","big","most big"],0],["Asia is a ___.",["continent","country","city","ocean"],0],["China is ___ than Thailand.",["bigger","biggest","more big","big"],0]]},
+{t:"Reading & Writing",th:"การอ่านและการเขียน",e:"✍️",v:["paragraph","topic sentence","main idea","capital letter","full stop","comma"],g:"อ่านจับใจความและเขียนย่อหน้าสั้น ๆ ได้",w:["Main idea / details","เครื่องหมายวรรคตอน","การเขียนย่อหน้าแนะนำตัว"],q:[
+["A sentence always starts with a ___.",["capital letter","comma","full stop","small letter"],0],["Which sentence is correct?",["I live in Bangkok.","i live in bangkok.","I lives in Bangkok.","I live in bangkok"],0],["The ___ tells the main idea of a paragraph.",["topic sentence","title page","full stop","comma"],0],["We put a ___ ( . ) at the end of a sentence.",["full stop","question mark","comma","capital letter"],0],["Read: \"Ben gets up at 6. He walks to school.\" How does Ben go to school?",["on foot","by bus","by car","by bike"],0]]},
+{t:"Review & Project",th:"ทบทวนและโครงงาน",e:"🏆",v:["review","project","present","poster","team","feedback"],g:"ทบทวนความรู้ทั้งเทอมและนำเสนอโครงงาน",w:["ทบทวนไวยากรณ์ทั้งเทอม","การทำงานเป็นทีม","การนำเสนอผลงาน"],q:[
+["She ___ English every day. (Present Simple)",["studies","study","studying","studys"],0],["Yesterday I ___ to the market.",["went","go","goes","going"],0],["Elephants are ___ than dogs.",["bigger","big","biggest","more big"],0],["You look tired. You ___ go to bed early.",["should","shouldn't","can't","don't"],0],["There ___ some milk in the glass.",["is","are","am","be"],0]]}
+];
+
+const EXTRA=[
+[["A: What's your name? B: ___",["My name is Ploy.","I'm fine.","I'm from Chiang Mai.","Nice to meet you."],0],["We say 'Good afternoon' at ___.",["2 p.m.","8 a.m.","10 p.m.","midnight"],0],["\"How old are you?\" — \"I'm ___.\"",["twelve years old","from Thailand","a student","fine"],0],["This ___ my friend, Beam.",["is","are","am","be"],0],["A: See you tomorrow! B: ___",["See you!","Good morning!","Nice to meet you.","How are you?"],0]],
+[["I usually ___ my homework after dinner.",["do","does","doing","did"],0],["My father ___ coffee every morning.",["drinks","drink","drinking","drinked"],0],["She never ___ late for school.",["is","are","am","be"],0],["Which word means 'ไม่เคย'?",["never","often","usually","always"],0],["What time ___ you go to bed?",["do","does","are","is"],0]],
+[["My father's sister is my ___.",["aunt","uncle","niece","grandmother"],0],["My parents are my ___.",["father and mother","brother and sister","uncle and aunt","grandparents"],0],["She ___ a younger brother.",["has","have","is","are"],0],["Tom and Ben are brothers. ___ house is big.",["Their","His","Her","Our"],0],["My brother's daughter is my ___.",["niece","nephew","cousin","aunt"],0]],
+[["We play sports in the ___.",["gym","library","office","canteen"],0],["Math, Science and English are ___.",["subjects","teachers","classrooms","books"],0],["The book is ___ the desk. (บน)",["on","in","under","behind"],0],["There ___ a computer room in our school.",["is","are","am","be"],0],["A list of classes and times is a ___.",["timetable","homework","dictionary","uniform"],0]],
+[["She enjoys ___ pictures.",["drawing","draw","draws","to drawing"],0],["They ___ swimming on Sundays.",["go","play","do","make"],0],["Do you like listening ___ music?",["to","at","for","with"],0],["My brother plays ___ guitar.",["the","a","an","—"],0],["I love ___ films at the weekend.",["watching","watch","watches","watched"],0]],
+[["There aren't ___ eggs in the box.",["any","some","much","a"],0],["Would you like ___ tea?",["some","any","many","a"],0],["Which is countable?",["apple","rice","milk","sugar"],0],["How many ___ do you eat a day?",["bananas","rice","water","bread"],0],["I'd like a glass of ___.",["water","egg","banana","sandwich"],0]],
+[["This shirt is too small. Do you have a bigger ___?",["size","price","cashier","color"],0],["The person who takes your money in a shop is a ___.",["cashier","chef","pilot","farmer"],0],["How much ___ this hat?",["is","are","am","be"],0],["Shirt A is 500 baht. Shirt B is 800 baht. Shirt B is ___ than Shirt A.",["more expensive","cheaper","smaller","older"],0],["Can I help you? — ___",["Yes, I'm looking for a bag.","No, I'm fine, thank you very much yesterday.","I'm 12.","Good night."],0]],
+[["You can buy bread at the ___.",["bakery","hospital","bank","police station"],0],["The cat is ___ the box. (ข้างใน)",["in","on","between","next"],0],["The post office is ___ to the bank. (ข้าง ๆ)",["next","near of","between","opposite of"],0],["You keep your money at the ___.",["bank","zoo","cinema","library"],0],["The cinema is ___ the park. (ตรงข้าม)",["opposite","between","in","on"],0]],
+[["You buy a ___ before you get on the train.",["ticket","menu","passport photo","key"],0],["Trains stop at the ___.",["station","airport","harbour","garage"],0],["How do you go to school? — I go ___ bicycle.",["by","on","in","with"],0],["Which vehicle flies?",["plane","bus","boat","train"],0],["It ___ two hours to get to Hua Hin by car.",["takes","take","taking","took to"],0]],
+[["When it's windy, the trees ___.",["move a lot","are dry","are hot","sleep"],0],["There are many clouds. It is ___.",["cloudy","sunny","snowy","dry"],0],["Songkran is in the ___ season in Thailand.",["hot (summer)","rainy","winter","cold"],0],["What's the weather like? — It's ___ and 35 °C.",["hot","cold","snowy","freezing"],0],["'ฟ้าร้อง' in English is ___.",["thunder","snow","rainbow","fog"],0]],
+[["I have a ___ throat. (เจ็บคอ)",["sore","bad","pain","hurt"],0],["You have a cold. You should ___.",["rest and drink water","eat ice cream","swim in the rain","stay up late"],0],["A ___ looks after sick animals.",["vet","dentist","pilot","chef"],0],["My stomach ___.",["hurts","hurt","hurting","is hurt me"],0],["'ไข้' in English is ___.",["fever","cough","flu shot","headache"],0]],
+[["Can I see the ___, please? (รายการอาหาร)",["menu","bill","tip","chef"],0],["What would you like to ___?",["drink","drinks","drinking","drank"],0],["A: Here is your food. B: ___",["Thank you.","You're welcome.","Excuse me.","Sorry."],0],["I'd like ___ fried rice, please.",["some","many","an","few"],0],["Sweet food after the main dish is ___.",["dessert","soup","starter","salad"],0]],
+[["A room for two people with one big bed is a ___ room.",["double","single","twin","small"],0],["You can swim in the hotel ___.",["pool","lobby","reception","lift"],0],["Can I have a ___ call at 6 a.m.? (ปลุก)",["wake-up","get-up","stand-up","look-up"],0],["The ___ takes you up to your floor.",["lift","pool","key","bill"],0],["I have a ___ for two nights. (การจอง)",["booking","booker","booked","book"],0]],
+[["A ___ helps doctors and looks after patients.",["nurse","pilot","chef","farmer"],0],["He is ___ teacher.",["a","an","the","—"],0],["A ___ catches criminals.",["police officer","dentist","singer","farmer"],0],["She wants to ___ a doctor.",["be","is","being","been"],0],["A person who designs buildings is an ___.",["architect","actor","artist","athlete"],0]],
+[["Loy Krathong is ___ November.",["in","on","at","by"],0],["We ___ Songkran last April.",["celebrated","celebrate","celebrates","celebrating"],0],["At Christmas, people give ___.",["presents","rubbish","homework","tickets"],0],["New Year's Day is ___ 1st January.",["on","in","at","to"],0],["On Loy Krathong night, people float ___ on the river.",["krathongs","umbrellas","kites","books"],0]],
+[["We should ___ trees to make the air clean.",["plant","cut","burn","throw"],0],["Use cloth bags instead of ___ bags.",["plastic","paper money","school","sleeping"],0],["Put rubbish ___ the bin.",["in","on","under","at"],0],["Saving energy means ___.",["turning off fans when you leave","leaving the TV on","opening the fridge all day","using more water"],0],["Which can we recycle?",["glass bottles","food waste","banana peel","dirty tissue"],0]],
+[["Don't ___ your password to anyone.",["give","giving","gives","gave"],0],["I use the ___ to search for information.",["internet","oven","fridge","fan"],0],["You need Wi-Fi to go ___.",["online","offline","outside","upstairs"],0],["Which is a safe way to use the internet?",["Don't meet strangers you met online.","Share your home address.","Click every link.","Tell everyone your password."],0],["A small program on a smartphone is an ___.",["app","keyboard","screen","cable"],0]],
+[["The capital of Thailand is ___.",["Bangkok","Chiang Mai","Phuket","Tokyo"],0],["People from Japan are ___.",["Japanese","Japan","Japanish","Japanian"],0],["Mount Everest is the ___ mountain in the world.",["highest","higher","high","most high"],0],["Thailand is in ___.",["Asia","Europe","Africa","South America"],0],["Russia is ___ than Thailand.",["bigger","big","biggest","more big"],0]],
+[["A sentence ends with a ___.",["full stop","capital letter","comma","space"],0],["We use a ___ between items in a list: apples, bananas, oranges.",["comma","full stop","question mark","capital letter"],0],["A question ends with a ___.",["question mark","full stop","comma","dash"],0],["Which word should start with a capital letter?",["Thailand","school","apple","teacher"],0],["The main idea tells ___.",["what the paragraph is mostly about","the last word","the title page","the writer's age"],0]],
+[["Look! The children ___ football now.",["are playing","play","plays","played"],0],["She didn't ___ to school yesterday.",["go","went","goes","going"],0],["This is the ___ book in the library.",["oldest","older","old","most old"],0],["How ___ water do you drink a day?",["much","many","lot","few"],0],["I go to school ___ bus.",["by","on","in","at"],0]]
+];
+
+L.forEach((l,i)=>{if(EXTRA[i])l.q.push(...EXTRA[i])});
+// positions (% of map)
+const P=[[6,40],[16,46],[25,40],[34,46],[42,38],[8,82],[18,88],[28,82],[37,88],[46,80],[58,46],[66,40],[74,46],[82,40],[90,46],[56,85],[65,90],[74,84],[83,90],[92,82]];
+const N=L.length;const BOSS=N>10?[{id:"b1",t:"BOSS 1",th:"สอบกลางภาค (ด่าน 1-10)",pos:[48,17],from:0},{id:"b2",t:"BOSS 2",th:"สอบปลายภาค (ด่าน 11-20)",pos:[93,17],from:10}]:[{id:"b1",t:"BOSS",th:`สอบรวม (ด่าน 1-${N})`,pos:[48,17],from:0}];
+const PID=localStorage.getItem("piyamit_pid")||"";let ME=null;
+const SUBJ=CFG.key;
+
+let S={s:{},coins:0,r:{}};
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||{s:{},coins:0}}catch(e){return{s:{},coins:0}}}
+function save(){}
+const stars=i=>S.s[i]||0;
+function unlocked(i){if(i<=0)return true;if(i===10&&N>10)return stars("b1")>0&&stars(9)>0;return stars(i-1)>0&&unlocked(i-1)}
+function bossUnlocked(b){for(let i=b.from;i<Math.min(N,b.from+10);i++)if(!stars(i))return false;return true}
+function st(n){let h='<span class="stars">';for(let k=0;k<3;k++)h+=k<n?'★':'<span class="off">★</span>';return h+'</span>'}
+const map=document.getElementById('map');
+function render(){
+ map.querySelectorAll('.node,.zone,.deco,svg').forEach(e=>e.remove());
+ const pts=[...P.slice(0,5),[50,63],...P.slice(5,10).reverse()];
+ const pts2=N<=10?[]:[...P.slice(10,15),[96,63],...P.slice(15,20).reverse()];
+ const path=a=>a.map((p,i)=>(i?'L':'M')+p[0]*10+' '+p[1]*5).join(' ');
+ map.insertAdjacentHTML('beforeend',`<svg class="path" viewBox="0 0 1000 500" preserveAspectRatio="none">
+ ${[pts,pts2].filter(a=>a.length).map(a=>`<path d="${path(a)}" fill="none" stroke="#f3d9a4" stroke-width="22" stroke-linejoin="round" stroke-linecap="round"/><path d="${path(a)}" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="10 10"/>`).join('')}
+ <path d="M${P[4][0]*10} ${P[4][1]*5} L480 85" stroke="#e57373" stroke-width="6" stroke-dasharray="6 8" fill="none"/>
+ ${N>10?`<path d="M${P[14][0]*10} ${P[14][1]*5} L930 85" stroke="#e57373" stroke-width="6" stroke-dasharray="6 8" fill="none"/>`:''}</svg>`);
+ const deco=[["🏰",2,12],["🎡",30,14],["🚌",22,62],["🌳",12,63],["🌴",40,64],["🏯",10,20],["🌉",30,58],["⛵",20,58],["✈️",60,15],["🏙️",68,16],["🗽",80,18],["🌋",52,8],["🌴",86,62],["🏝️",70,62],["🐘",3,62],["🌸",50,94],["🏟️",98,60]];
+ deco.forEach(d=>map.insertAdjacentHTML('beforeend',`<div class="deco" style="left:${d[1]}%;top:${d[2]}%">${d[0]}</div>`));
+ map.insertAdjacentHTML('beforeend',CFG.zones||`<div class="zone" style="left:8%;background:#1e5bb8">ช่วงที่ 1 : ก่อนสอบกลางภาค (ด่านที่ 1-10)<small>ทบทวนพื้นฐานและการสื่อสารในชีวิตประจำวัน</small></div>
+ <div class="zone" style="left:56%;background:#8e24aa">ช่วงที่ 2 : หลังสอบกลางภาค (ด่านที่ 11-20)<small>ไวยากรณ์ การอ่าน การเขียน และการสื่อสารในสถานการณ์ต่าง ๆ</small></div>`);
+ L.forEach((l,i)=>{const c=stars(i)?'done':unlocked(i)?'open':'locked';
+  map.insertAdjacentHTML('beforeend',`<div class="node ${c}" data-i="${i}" style="left:${P[i][0]}%;top:${P[i][1]}%"><div class="c">${c==='locked'?'🔒':i+1}</div>${st(stars(i))}<div class="lb">${l.e} ${l.t}<small>${l.th}</small></div></div>`)});
+ BOSS.forEach(b=>{const c=stars(b.id)?'done':bossUnlocked(b)?'open':'locked';
+  map.insertAdjacentHTML('beforeend',`<div class="node boss ${c}" data-b="${b.id}" style="left:${b.pos[0]}%;top:${b.pos[1]}%"><div class="c">${c==='locked'?'🔒':'👹'}</div>${st(stars(b.id))}<div class="lb">${b.t}<small>${b.th}</small></div></div>`)});
+ // header
+ const done=L.filter((_,i)=>stars(i)).length;let tot=0;L.forEach((_,i)=>tot+=stars(i));
+ const pc=Math.round(done/N*100);pb.style.width=pc+'%';pt.textContent=`${done}/${N} ด่าน (${pc}%)`;document.getElementById('st').textContent=tot+'/'+N*3;co.textContent=S.coins;
+ // table
+ const cur=L.findIndex((_,i)=>!stars(i)&&unlocked(i));
+ const row=i=>{const s=stars(i);const b=s?'<span class="badge b-done">ผ่านแล้ว</span>':i===cur?'<span class="badge b-cur">กำลังเรียน</span>':'<span class="badge b-no">ยังไม่เริ่ม</span>';
+  return `<div class="row" data-i="${i}"><b>${i+1}</b><span style="font-size:20px">${L[i].e}</span><div class="t">${L[i].t}<small>${L[i].th}</small><small class="desc">📌 ${L[i].g}</small><small class="desc2">📚 ${L[i].w.join(" · ")}</small></div>${b}${st(s)}</div>`};
+ const rng=(a,b)=>{let h='';for(let i=a;i<b;i++)h+=row(i);return h};
+ document.getElementById('table').innerHTML=CFG.units?CFG.units(rng):`<div class="unit" style="border-color:#1e88e5"><h3>📘 หน่วยที่ 1 ทบทวนพื้นฐานและการสื่อสารในชีวิตประจำวัน (ด่านที่ 1-5)</h3>${rng(0,5)}</div>
+ <div class="unit" style="border-color:#43a047"><h3>📗 หน่วยที่ 2 การใช้ภาษาในสถานการณ์ต่าง ๆ (ด่านที่ 6-10)</h3>${rng(5,10)}</div>
+ <div class="unit" style="border-color:#8e24aa"><h3>📕 หน่วยที่ 3 ไวยากรณ์ การอ่าน การเขียน และสังคมโลก (ด่านที่ 11-20)</h3><div class="u3"><div>${rng(10,15)}</div><div>${rng(15,20)}</div></div></div>`;
+}
+document.addEventListener('click',e=>{const n=e.target.closest('[data-i],[data-b]');if(!n||n.closest('#modal'))return;
+ if(n.dataset.b){const b=BOSS.find(x=>x.id===n.dataset.b);if(bossUnlocked(b))openBoss(b);else toast('🔒 ต้องผ่านด่านทั้ง 10 ด่านในช่วงนี้ก่อน');return}
+ const i=+n.dataset.i;if(i>=N)return;if(unlocked(i))openLesson(i);else toast('🔒 ต้องผ่านด่านก่อนหน้าก่อนนะ')});
+const modal=document.getElementById('modal'),card=document.getElementById('card');
+function closeM(){modal.classList.remove('show')}
+modal.addEventListener('click',e=>{if(e.target===modal)closeM()});
+function hdr(t,s,c){return `<div class="top" style="${c||''}"><button class="btn x" onclick="closeM()">✕</button><h2>${t}</h2><div>${s}</div></div>`}
+function openLesson(i){const l=L[i];
+ card.innerHTML=hdr(`${l.e} ด่านที่ ${i+1}: ${l.t}`,l.th)+`<div class="body">
+ <div class="box g1"><h4>🎯 เป้าหมายการเรียนรู้</h4><ul><li>${l.g}</li></ul></div>
+ <div class="box g2"><h4>📚 สิ่งที่จะได้เรียนรู้</h4><ul>${l.w.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+ <div class="box g3"><h4>🔤 คำศัพท์สำคัญ</h4><div class="vocab">${l.v.map(x=>`<span>${x}</span>`).join('')}</div></div>
+ <button class="btn go" id="start">🎮 เริ่มทำแบบทดสอบ (${Math.min(QN,l.q.length)} ข้อ จากคลัง ${l.q.length} ข้อ)</button></div>`;
+ modal.classList.add('show');start.onclick=()=>quiz(shuffle(l.q).slice(0,QN),i,`ด่านที่ ${i+1}: ${l.t}`)}
+function openBoss(b){const pool=[];for(let i=b.from;i<Math.min(N,b.from+10);i++)if(L[i])pool.push(L[i].q[Math.floor(Math.random()*L[i].q.length)]);
+ card.innerHTML=hdr(`👹 ${b.t}: ${b.th}`,'ตอบคำถามผสมจากทุกด่าน 10 ข้อ เพื่อพิชิตบอส!','background:linear-gradient(120deg,#b71c1c,#6a1b9a)')+`<div class="body"><div class="box g3"><h4>⚔️ กติกา</h4><ul><li>${pool.length} ข้อ จากด่าน ${b.from+1}-${b.from+pool.length}</li><li>ถูก 5 ข้อขึ้นไปเพื่อผ่าน</li><li>รางวัลเหรียญ x2</li></ul></div><button class="btn go" id="start">⚔️ ท้าสู้บอส!</button></div>`;
+ modal.classList.add('show');start.onclick=()=>quiz(shuffle(pool),b.id,`${b.t} – ${b.th}`)}
+const QN=10;
+// สับตัวเลือกแบบกำหนดได้ (deterministic) ต่อ ผู้เล่น+คำถาม: ลำดับคงที่เมื่อรีโหลด แต่ต่างกันในแต่ละคน
+function hash32(str){let h=2166136261>>>0;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)>>>0}return h}
+function mulberry32(a){return function(){a=(a+0x6D2B79F5)>>>0;let t=a;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296}}
+function seededShuffle(arr,seed){const a=[...arr],rnd=mulberry32(hash32(seed));for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function quiz(qs,id,title){let k=0,score=0;const boss=typeof id==='string';
+ const show=()=>{const q=qs[k];const opts=seededShuffle(q[1].map((o,j)=>({o,ok:j===q[2]})),PID+'|'+SUBJ+'|'+q[0]);
+  card.innerHTML=hdr(title,boss?'BOSS BATTLE':'แบบทดสอบ',boss?'background:linear-gradient(120deg,#b71c1c,#6a1b9a)':'')+`<div class="body"><div class="qp"><span>ข้อ ${k+1}/${qs.length}</span><span>✅ ${score}</span></div><div class="pbar" style="width:100%"><i style="width:${k/qs.length*100}%"></i></div><div class="q">${q[0]}</div><div class="opts">${opts.map((o,j)=>`<button class="btn opt" data-ok="${o.ok}">${'ABCD'[j]}. ${o.o}</button>`).join('')}</div></div>`;
+  card.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{const ok=b.dataset.ok==='true';if(ok)score++;
+   card.querySelectorAll('.opt').forEach(x=>{x.disabled=true;if(x.dataset.ok==='true')x.classList.add('ok')});if(!ok)b.classList.add('bad');
+   setTimeout(()=>{k++;k<qs.length?show():result()},700)})};
+ const result=()=>{const r=score/qs.length;const s=r>=.9?3:r>=.7?2:r>=.5?1:0;const coins=score*10*(boss?2:1)+s*5;api("result",{pid:PID,subj:SUBJ,base:String(id),score,total:qs.length,stars:s,coins:s?coins:0}).then(p=>{S=p;render()}).catch(e=>toast("⚠️ บันทึกคะแนนไม่สำเร็จ ตรวจสอบการเชื่อมต่อ"));
+  if(s){if(s>stars(id))S.s[id]=s;S.coins+=coins;save();render();confetti()}
+  card.innerHTML=hdr(title,'ผลการทดสอบ')+`<div class="body res"><div class="big">${st(s).replace('stars','stars" style="font-size:56px')}</div><h2>${s?'เยี่ยมมาก! ผ่านด่านแล้ว 🎉':'ยังไม่ผ่าน ลองอีกครั้งนะ 💪'}</h2><p>ตอบถูก ${score}/${qs.length} ข้อ ${s?`· ได้รับ 🪙 ${coins} เหรียญ`:'(ต้องถูกอย่างน้อย 50%)'}</p>${nextBtn(id,s)}<button class="btn go" style="background:#5c6bc0;box-shadow:0 4px 0 #303f9f;margin-top:8px" onclick="closeM()">🗺️ กลับไปที่แผนที่</button></div>`;
+  const nb=card.querySelector('#nextb');if(nb)nb.onclick=()=>{const a=nb.dataset.a;if(a==='retry')boss?openBoss(BOSS.find(x=>x.id===id)):openLesson(id);else if(a[0]==='b')openBoss(BOSS.find(x=>x.id===a));else openLesson(+a)}};
+ show()}
+function nextBtn(id,s){if(!s)return '<button class="btn go" id="nextb" data-a="retry">🔁 ลองอีกครั้ง</button>';
+ let a=null,lab='';if(typeof id==='number'){const b=BOSS.find(x=>Math.min(N,x.from+10)-1===id);if(b&&bossUnlocked(b)&&!stars(b.id)){a=b.id;lab='👹 ไปสู้บอส'}else if(id+1<N&&unlocked(id+1)){a=id+1;lab=`▶ ไปด่านที่ ${id+2}`}}
+ else{const bi=BOSS.findIndex(x=>x.id===id);const n=BOSS[bi].from+10;if(n<N&&unlocked(n)){a=n;lab=`▶ ไปด่านที่ ${n+1}`}}
+ return a===null?'<div style="margin:8px 0;font-weight:600">🏁 จบทุกด่านในวิชานี้แล้ว! ยอดเยี่ยมมาก</div>':`<button class="btn go" id="nextb" data-a="${a}">${lab}</button>`}
+function toast(m){const t=document.createElement('div');t.textContent=m;t.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 18px;border-radius:12px;z-index:70';document.body.appendChild(t);setTimeout(()=>t.remove(),1800)}
+function confetti(){const c=document.getElementById('confetti'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;
+ const p=Array.from({length:150},()=>({x:Math.random()*c.width,y:-20-Math.random()*c.height/2,v:2+Math.random()*4,s:5+Math.random()*6,c:`hsl(${Math.random()*360},90%,60%)`,r:Math.random()*6}));let f=0;
+ (function a(){x.clearRect(0,0,c.width,c.height);p.forEach(q=>{q.y+=q.v;q.r+=.1;x.fillStyle=q.c;x.save();x.translate(q.x+Math.sin(q.r)*10,q.y);x.rotate(q.r);x.fillRect(-q.s/2,-q.s/2,q.s,q.s*.6);x.restore()});if(++f<150)requestAnimationFrame(a);else x.clearRect(0,0,c.width,c.height)})()}
+document.getElementById('reset').onclick=()=>{if(confirm('รีเซ็ตความคืบหน้าทั้งหมด?')){api('reset',{pid:PID,subj:SUBJ}).then(p=>{S=p;render()})}};
+if(!PID)location.replace("index.html?need=1");else Promise.all([api("players"),api("progress",{pid:PID,subj:SUBJ})]).then(([pl,p])=>{ME=pl.players.find(x=>x.id===PID);if(!ME){localStorage.removeItem("piyamit_pid");location.replace("index.html?need=1");return}S=p;render();document.querySelector("header").insertAdjacentHTML("beforeend",`<a class="stat" href="index.html" style="text-decoration:none" title="เปลี่ยนผู้เล่น">👤 ${ME.nick||ME.name} · ${ME.cls||""}</a>`)}).catch(e=>{document.body.insertAdjacentHTML("afterbegin","<div style=\"background:#c62828;color:#fff;padding:10px;text-align:center\">⚠️ เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ — ลองรีเฟรชหน้า</div>")});
+</script></body></html>

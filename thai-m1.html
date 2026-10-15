@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ภาษาไทย ม.1 เทอม 2 – โรงเรียนปิยมิตรวิทยา</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;800&family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Kanit,Sarabun,Tahoma,sans-serif;background:#eef3fb;color:#1d2340}
+.app{display:flex;min-height:100vh}
+.side{width:84px;background:linear-gradient(#162447,#0f1a33);color:#cfd8f5;flex-shrink:0;padding:8px 6px;position:sticky;top:0;height:100vh}
+.side a{display:flex;flex-direction:column;align-items:center;font-size:11px;padding:8px 2px;border-radius:12px;color:inherit;text-decoration:none;margin-bottom:4px;cursor:pointer}
+.side a span{font-size:22px}.side a.active{background:linear-gradient(135deg,#ff4f7b,#ff7b54);color:#fff;box-shadow:0 4px 12px #ff4f7b66}
+.side a:hover:not(.active){background:#ffffff14}
+main{flex:1;min-width:0;padding:12px}
+header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:linear-gradient(90deg,#1b2a6b,#5b2c8f,#c2185b);color:#fff;border-radius:18px;padding:12px 16px;box-shadow:0 6px 20px #0003}
+.logo{width:56px;height:56px;border-radius:50%;background:#fff;color:#1b2a6b;font-weight:800;display:grid;place-items:center;font-size:16px;border:4px solid #ffd54f}
+.ttl{flex:1;min-width:220px}.ttl h1{margin:0;font-size:26px;text-shadow:0 2px 0 #0004}.ttl div{font-size:13px;opacity:.9}
+.stat{background:#ffffffee;color:#1d2340;border-radius:14px;padding:6px 12px;display:flex;align-items:center;gap:8px;font-weight:600}
+.pbar{width:170px;height:12px;background:#dde3f0;border-radius:8px;overflow:hidden}.pbar i{display:block;height:100%;background:linear-gradient(90deg,#43c76b,#9be15d);transition:width .6s}
+.btn{border:0;border-radius:12px;padding:8px 14px;font:inherit;font-weight:600;cursor:pointer}
+.reset{background:#fff3;color:#fff}
+.mapwrap{overflow-x:auto;margin-top:12px;border-radius:18px;box-shadow:0 6px 20px #0002}
+.map{position:relative;min-width:980px;aspect-ratio:2/1;overflow:hidden;background:linear-gradient(#8fd3ff 0%,#c8ecff 35%,#9be38a 36%,#5cbf60 100%)}
+.map .z2bg{position:absolute;right:0;top:0;bottom:0;width:50%;background:linear-gradient(#7b5ce0 0%,#e58fc6 35%,transparent 36%)}
+.river{position:absolute;left:0;right:0;top:56%;height:12%;background:linear-gradient(90deg,#3fa9f5,#69c9ff,#3fa9f5);opacity:.75;border-radius:50%}
+.deco{position:absolute;font-size:34px;pointer-events:none;filter:drop-shadow(0 3px 2px #0003)}
+.zone{position:absolute;top:2%;padding:6px 14px;border-radius:12px;color:#fff;font-weight:800;font-size:16px;text-align:center;box-shadow:0 4px 0 #0003}
+.zone small{display:block;font-weight:400;font-size:11px}
+svg.path{position:absolute;inset:0;width:100%;height:100%}
+.node{position:absolute;transform:translate(-50%,-50%);text-align:center;cursor:pointer;width:110px}
+.node .c{width:54px;height:54px;margin:auto;border-radius:50%;display:grid;place-items:center;font-size:22px;font-weight:800;color:#fff;border:4px solid #fff;box-shadow:0 5px 0 #0004;transition:transform .15s}
+.node:hover .c{transform:scale(1.12)}
+.node.done .c{background:linear-gradient(#43c76b,#1f8f45)}.node.open .c{background:linear-gradient(#ffb300,#ff6f00);animation:pulse 1.4s infinite}
+.node.locked .c{background:#8d97ad;cursor:not-allowed}.node.locked{cursor:not-allowed}
+@keyframes pulse{50%{box-shadow:0 0 0 10px #ffb30055,0 5px 0 #0004}}
+.node .lb{background:#fffffff0;border-radius:8px;font-size:11px;line-height:1.2;padding:3px 4px;margin-top:3px;font-weight:600}
+.node .lb small{display:block;font-weight:400;color:#555;font-size:10px}
+.stars{color:#ffc107;font-size:13px;letter-spacing:-1px;text-shadow:0 1px 0 #0005}.stars .off{color:#c9ced8}
+.boss .c{width:84px;height:84px;font-size:40px;background:linear-gradient(#e53935,#7b1fa2)!important;border-color:#ffd54f}
+.boss .lb{background:#b71c1c;color:#fff}.boss .lb small{color:#ffe082}
+.boss.locked .c{filter:grayscale(.8)}
+.table{display:grid;grid-template-columns:1fr 1fr 1.6fr;gap:12px;margin-top:12px}
+.unit{background:#fff;border-radius:16px;padding:10px;border-top:6px solid}
+.unit h3{margin:0 0 8px;font-size:15px}
+.row{display:flex;align-items:center;gap:8px;padding:6px;border-bottom:1px solid #eef;font-size:13px;cursor:pointer}
+.row:hover{background:#f5f7ff}.row b{width:20px}.row .t{flex:1}.row .t small{display:block;color:#777}
+.badge{font-size:11px;padding:2px 8px;border-radius:8px;white-space:nowrap}
+.b-done{background:#dff6e5;color:#1f8f45}.b-cur{background:#fff1cc;color:#c77700}.b-no{background:#eceff4;color:#778}
+.u3{display:grid;grid-template-columns:1fr 1fr;column-gap:10px}
+.modal{position:fixed;inset:0;background:#0b1030b0;display:none;align-items:center;justify-content:center;z-index:50;padding:10px}
+.modal.show{display:flex}
+.card{background:#fff;border-radius:22px;max-width:720px;width:100%;max-height:94vh;overflow:auto;box-shadow:0 20px 60px #0006}
+.card .top{padding:16px 20px;color:#fff;background:linear-gradient(120deg,#1e88e5,#7c4dff);border-radius:22px 22px 0 0;position:relative}
+.card .top h2{margin:0;font-size:24px}.card .x{position:absolute;right:14px;top:12px;background:#fff3;color:#fff;font-size:18px}
+.card .body{padding:16px 20px}
+.box{border-radius:14px;padding:10px 14px;margin-bottom:10px}
+.box h4{margin:0 0 6px}.box ul{margin:0;padding-left:20px;font-family:Sarabun,Kanit,sans-serif}
+.g1{background:#e8f5e9}.g2{background:#e3f2fd}.g3{background:#fff8e1}
+.vocab{display:flex;flex-wrap:wrap;gap:6px}.vocab span{background:#fff;border:2px solid #ffd54f;border-radius:10px;padding:3px 8px;font-size:13px}
+.go{background:linear-gradient(#ff7043,#e64a19);color:#fff;font-size:18px;width:100%;padding:12px;box-shadow:0 4px 0 #a33}
+.q{font-size:19px;margin:8px 0 12px}.opts{display:grid;gap:8px}
+.opt{text-align:left;background:#f1f4ff;border:2px solid #d5dcf5;font-size:16px}
+.opt:hover:not(:disabled){background:#e3e9ff}.opt.ok{background:#c8f7d2;border-color:#2e7d32}.opt.bad{background:#ffd6d6;border-color:#c62828}
+.qp{display:flex;justify-content:space-between;color:#666;font-size:14px}
+.res{text-align:center}.res .big{font-size:56px;color:#ffc107}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:60}
+@media(max-width:900px){.table{grid-template-columns:1fr}.u3{grid-template-columns:1fr}}
+@media(max-width:640px){.app{flex-direction:column}.side{width:100%;height:auto;position:static;display:flex;overflow-x:auto;padding:4px}.side a{min-width:64px;margin:0 2px}
+.ttl h1{font-size:20px}.pbar{width:110px}main{padding:8px}}
+.row .t small.desc{color:#1e5bb8;font-family:Sarabun,Kanit,sans-serif;font-size:12px}.row .t small.desc2{color:#8a6d00;font-size:11px}.side a.soon{opacity:.45;cursor:default}
+</style></head><body>
+<div class="app">
+<nav class="side">
+<a href="index.html"><span>🏠</span>หน้าหลัก</a><a href="thai-m1.html" class="active"><span>📖</span>ภาษาไทย</a><a href="english-m1.html" ><span>🇬🇧</span>ภาษาอังกฤษ</a><a href="science-m1.html" ><span>🔬</span>วิทยาศาสตร์</a><a href="math-m1.html" ><span>➗</span>คณิตศาสตร์</a><a href="social-m1.html" ><span>🌏</span>สังคมศึกษา</a><a class="soon"><span>🏆</span>อันดับ</a><a class="soon"><span>⚙️</span>ตั้งค่า</a>
+</nav>
+<main>
+<header>
+<div class="logo">ไทย</div>
+<div class="ttl"><h1>ภาษาไทย ม.1 เทอม 2</h1><div>โรงเรียนปิยมิตรวิทยา ฝ่ายมัธยม · ร้อยกรอง | วรรณคดี | หลักภาษา | การอ่านและเขียน</div></div>
+<div class="stat">ความคืบหน้า <div class="pbar"><i id="pb"></i></div><span id="pt"></span></div>
+<div class="stat">⭐ <span id="st"></span></div>
+<div class="stat">🪙 <span id="co"></span></div>
+<button class="btn reset" id="reset">↺ รีเซ็ต</button>
+</header>
+<div class="mapwrap"><div class="map" id="map"><div class="z2bg"></div><div class="river"></div></div></div>
+<div class="table" id="table"></div>
+</main></div>
+<div class="modal" id="modal"><div class="card" id="card"></div></div>
+<canvas id="confetti"></canvas>
+<script src="config.js"></script><script src="api.js"></script><script>
+const CFG={key:"piyamit_thai_m1_t2_v1",zones:`<div class="zone" style="left:8%;background:#1e5bb8">ฐานที่ 1-10 : ภาษาไทย ม.1 เทอม 2<small>วรรณคดี · หลักภาษา · การอ่านเขียน</small></div><div class="zone" style="left:56%;background:#8e24aa">👹 ผ่านครบ 10 ฐาน แล้วสู้บอสสอบรวม<small>ท 1.1 · ท 2.1 · ท 4.1 · ท 5.1</small></div>`,units:rng=>`<div class="unit" style="border-color:#1e88e5"><h3>📜 ร้อยกรองและวรรณคดีคำสอน (ฐานที่ 1-5)</h3>${rng(0,5)}</div><div class="unit" style="border-color:#43a047"><h3>🎭 วรรณคดี หลักภาษา การอ่าน-เขียน (ฐานที่ 6-10)</h3>${rng(5,10)}</div>`};
+const L=[
+{t:"ฉันทลักษณ์และการอ่านออกเสียงร้อยกรอง",th:"กาพย์ยานี ฉบัง สุรางคนางค์",e:"🎼",v:["คณะ","สัมผัส","กาพย์ยานี ๑๑","กาพย์ฉบัง ๑๖","กาพย์สุรางคนางค์ ๒๘"],g:"อ่านออกเสียงบทร้อยกรองได้ถูกต้องตามฉันทลักษณ์",w:["ลักษณะคำประพันธ์ประเภทกาพย์","การแบ่งวรรคตอนในการอ่าน","สัมผัสนอก สัมผัสใน"],q:[
+["กาพย์ยานี ๑๑ หนึ่งบาทมีกี่คำ",["๑๑ คำ","๑๖ คำ","๒๘ คำ","๗ คำ"],0],
+["กาพย์ยานี ๑๑ วรรคหน้ามีกี่คำ และวรรคหลังมีกี่คำ",["๕ คำ และ ๖ คำ","๖ คำ และ ๕ คำ","๔ คำ และ ๗ คำ","๕ คำ และ ๕ คำ"],0],
+["กาพย์ฉบัง ๑๖ หนึ่งบทมีกี่วรรค",["๓ วรรค","๔ วรรค","๒ วรรค","๗ วรรค"],0],
+["กาพย์ฉบัง ๑๖ มีจำนวนคำในแต่ละวรรคเป็นอย่างไร",["๖ – ๔ – ๖","๕ – ๖ – ๕","๔ – ๔ – ๔","๘ – ๘ – ๘"],0],
+["กาพย์สุรางคนางค์ ๒๘ หนึ่งบทมีกี่วรรค วรรคละกี่คำ",["๗ วรรค วรรคละ ๔ คำ","๔ วรรค วรรคละ ๗ คำ","๒ วรรค วรรคละ ๑๔ คำ","๘ วรรค วรรคละ ๔ คำ"],0],
+["สัมผัสที่อยู่ภายในวรรคเดียวกัน เรียกว่าอะไร",["สัมผัสใน","สัมผัสนอก","สัมผัสระหว่างบท","สัมผัสบังคับ"],0],
+["สัมผัสที่เชื่อมระหว่างวรรค เป็นสัมผัสบังคับ เรียกว่าอะไร",["สัมผัสนอก","สัมผัสใน","สัมผัสอักษร","สัมผัสสระในวรรค"],0],
+["การอ่านกาพย์ยานี ๑๑ วรรคหน้า ๕ คำ ควรเว้นจังหวะอย่างไร",["๒ / ๓","๓ / ๒","๑ / ๔","๔ / ๑"],0],
+["คำว่า 'ร้อยกรอง' หมายถึงอะไร",["ข้อความที่แต่งตามฉันทลักษณ์","ข้อความทั่วไปที่ไม่มีสัมผัส","จดหมาย","ข่าว"],0],
+["'มีมารยาทในการอ่าน' ข้อใดถูกต้อง",["ไม่ส่งเสียงรบกวนผู้อื่นขณะอ่าน","ขีดเขียนหนังสือห้องสมุด","พับมุมหนังสือ","อ่านเสียงดังในห้องสมุด"],0],
+["สัมผัสระหว่างคำว่า 'ใจ' กับ 'ไป' เป็นสัมผัสชนิดใด",["สัมผัสสระ","สัมผัสอักษร","ไม่สัมผัส","สัมผัสพยัญชนะ"],0]]},
+{t:"กาพย์พระไชยสุริยา",th:"Kap Phra Chai Suriya",e:"👑",v:["สุนทรภู่","พระไชยสุริยา","นางสุมาลี","เมืองสาวัตถี","มาตราตัวสะกด"],g:"สรุปเนื้อหา วิเคราะห์คุณค่าและข้อคิดจากกาพย์พระไชยสุริยา",w:["ผู้แต่งและจุดมุ่งหมาย","คำประพันธ์ที่ใช้","ข้อคิดเรื่องความดี-ความชั่ว"],q:[
+["ผู้แต่งกาพย์พระไชยสุริยาคือใคร",["สุนทรภู่","รัชกาลที่ ๖","พระยาอุปกิตศิลปสาร","ศรีปราชญ์"],0],
+["กาพย์พระไชยสุริยาใช้คำประพันธ์ประเภทใด",["กาพย์ยานี ๑๑ กาพย์ฉบัง ๑๖ และกาพย์สุรางคนางค์ ๒๘","โคลงสี่สุภาพ","กลอนแปด","ร่ายสุภาพ"],0],
+["จุดประสงค์สำคัญของการแต่งกาพย์พระไชยสุริยาคือข้อใด",["เป็นแบบเรียนให้เด็กฝึกอ่านสะกดคำตามมาตราตัวสะกด","เพื่อเล่นละคร","เพื่อบันทึกประวัติศาสตร์","เพื่อใช้ในพิธีหลวง"],0],
+["พระมเหสีของพระไชยสุริยาชื่อว่าอะไร",["นางสุมาลี","นางมณโฑ","นางสีดา","นางวันทอง"],0],
+["บ้านเมืองของพระไชยสุริยาเกิดเหตุร้ายเพราะอะไร",["ผู้คนประพฤติไม่ตั้งอยู่ในศีลธรรม ข้าราชการโกงกิน","ศัตรูยกทัพมาตี","เกิดแผ่นดินไหว","กษัตริย์สละราชสมบัติ"],0],
+["เมืองของพระไชยสุริยาในเรื่องชื่อว่าอะไร",["สาวัตถี","อโยธยา","ลงกา","ผลึก"],0],
+["ตอนต้นเรื่องเริ่มด้วยบทที่ใช้คำในแม่ ก กา ข้อนี้แสดงถึงอะไร",["เรื่องเรียงเนื้อหาตามมาตราตัวสะกดจากง่ายไปยาก","สุนทรภู่ลืมใช้ตัวสะกด","เป็นภาษาบาลี","เป็นภาษาอังกฤษ"],0],
+["ข้อคิดสำคัญจากกาพย์พระไชยสุริยาคือข้อใด",["ผู้ปกครองและประชาชนควรตั้งอยู่ในศีลธรรม","ควรหนีปัญหา","เงินสำคัญที่สุด","ความรู้ไม่จำเป็น"],0],
+["ในตอนท้าย พระไชยสุริยาและนางสุมาลีได้ทำอะไร",["ออกบวชบำเพ็ญภาวนาจนได้ไปสวรรค์","กลับไปครองเมืองใหม่","สู้รบกับยักษ์","เดินทางไปค้าขาย"],0],
+["คำว่า 'สะกด' ในบริบทแบบเรียนหมายถึงอะไร",["ตัวพยัญชนะท้ายพยางค์ที่ทำให้เกิดเสียงตามมาตรา","การทำให้หลับ","การเดินตาม","การเขียนผิด"],0],
+["กาพย์พระไชยสุริยาจัดเป็นวรรณคดีประเภทใด",["วรรณคดีคำสอน/แบบเรียน","วรรณคดีนิราศ","วรรณคดีบทละคร","วรรณคดีพิธีกรรม"],0]]},
+{t:"โคลงโลกนิติ",th:"Khlong Lokaniti",e:"📜",v:["โคลงสี่สุภาพ","คำเอก","คำโท","สมเด็จฯ กรมพระยาเดชาดิศร"],g:"อธิบายฉันทลักษณ์โคลงสี่สุภาพและข้อคิดจากโคลงโลกนิติ",w:["ที่มาของโคลงโลกนิติ","ฉันทลักษณ์โคลงสี่สุภาพ","การนำข้อคิดไปใช้"],q:[
+["ผู้ชำระและแต่งโคลงโลกนิติในสมัยรัชกาลที่ ๓ คือใคร",["สมเด็จพระเจ้าบรมวงศ์เธอ กรมพระยาเดชาดิศร","สุนทรภู่","รัชกาลที่ ๖","เจ้าพระยาพระคลัง (หน)"],0],
+["โคลงโลกนิติแต่งด้วยคำประพันธ์ประเภทใด",["โคลงสี่สุภาพ","กาพย์ยานี ๑๑","กลอนสุภาพ","ร่ายยาว"],0],
+["โคลงสี่สุภาพ ๑ บท มีกี่บาท",["๔ บาท","๒ บาท","๓ บาท","๗ บาท"],0],
+["โคลงสี่สุภาพบังคับคำเอกและคำโทอย่างละเท่าใด",["เอก ๗ โท ๔","เอก ๔ โท ๗","เอก ๕ โท ๕","เอก ๓ โท ๒"],0],
+["โคลงโลกนิติได้รับการจารึกไว้ที่ใด",["วัดพระเชตุพนวิมลมังคลาราม (วัดโพธิ์)","วัดพระแก้ว","วัดอรุณ","วัดภูเขาทอง"],0],
+["โคลงโลกนิติมีเนื้อหาเกี่ยวกับเรื่องใด",["คำสอนเกี่ยวกับการดำเนินชีวิต","การเดินทาง","ตำนานยักษ์","การพยากรณ์อากาศ"],0],
+["\"พระสมุทรสุดลึกล้น คณนา ... จิตมนุษย์นี้ไซร้ ยากแท้หยั่งถึง\" มีความหมายว่าอย่างไร",["จิตใจของมนุษย์ยากที่จะหยั่งรู้ได้","ทะเลลึกที่สุดในโลก","ภูเขาวัดความสูงไม่ได้","มนุษย์ว่ายน้ำได้ลึก"],0],
+["โคลงโลกนิติมีที่มาจากคัมภีร์ภาษาใดเป็นสำคัญ",["ภาษาบาลี (คัมภีร์โลกนีติ)","ภาษาอังกฤษ","ภาษาจีน","ภาษาญี่ปุ่น"],0],
+["คำที่มีรูปวรรณยุกต์เอก เช่น คำใด",["ไม่","ได้","ช้าง","น้ำ"],0],
+["คำใดใช้แทนคำเอกในโคลงได้ (คำตาย)",["จิต","ใจ","มา","นา"],0],
+["การนำข้อคิดจากโคลงโลกนิติไปใช้ ข้อใดเหมาะสม",["คบคนดีและพูดจาไพเราะ","คบคนพาลเพื่อสนุก","พูดจาโอ้อวด","ไม่ฟังคำสอน"],0]]},
+{t:"สุภาษิตพระร่วง",th:"Suphasit Phra Ruang",e:"🏯",v:["ร่ายสุภาพ","คำสอน","สมัยสุโขทัย"],g:"วิเคราะห์ข้อคิดจากสุภาษิตพระร่วงและนำไปใช้ในชีวิต",w:["ที่มาและผู้แต่ง","ฉันทลักษณ์ร่ายสุภาพ","คำสอนสำคัญ"],q:[
+["สุภาษิตพระร่วงแต่งด้วยคำประพันธ์ประเภทใด",["ร่ายสุภาพ (จบด้วยโคลงสองสุภาพ)","กาพย์ยานี ๑๑","กลอนแปด","ฉันท์"],0],
+["สุภาษิตพระร่วงเชื่อกันว่ามีที่มาตั้งแต่สมัยใด",["สุโขทัย","อยุธยาตอนปลาย","ธนบุรี","รัตนโกสินทร์ตอนปลาย"],0],
+["สุภาษิตพระร่วงได้รับการจารึกไว้ที่ใดในสมัยรัชกาลที่ ๓",["วัดพระเชตุพนฯ (วัดโพธิ์)","ศาลาเฉลิมกรุง","ภูเขาทอง","พระราชวังบางปะอิน"],0],
+["\"เข้าเถื่อนอย่าลืมพร้า\" มีความหมายตรงกับข้อใด",["ควรเตรียมพร้อมก่อนเผชิญสิ่งที่ยากลำบาก","ห้ามเข้าป่า","พร้าเป็นของมีค่า","ควรตัดต้นไม้"],0],
+["\"อย่าริร่านแก่ความ\" หมายถึงอะไร",["อย่าหาเรื่องทะเลาะวิวาท","อย่าพูดเร็ว","อย่าอ่านหนังสือ","อย่าตื่นสาย"],0],
+["\"เมื่อน้อยให้เรียนวิชา ให้หาสินเมื่อใหญ่\" สอนเรื่องใด",["วัยเด็กควรตั้งใจเรียน โตแล้วจึงทำงานหาทรัพย์","เด็กควรหาเงินก่อนเรียน","ผู้ใหญ่ไม่ต้องทำงาน","ไม่ต้องเรียนหนังสือ"],0],
+["\"น้ำเชี่ยวอย่าขวางเรือ\" หมายถึงอะไร",["อย่าขัดขวางผู้มีอำนาจหรือสถานการณ์ที่รุนแรง","อย่าพายเรือ","น้ำเชี่ยวดีต่อเรือ","ให้ว่ายน้ำ"],0],
+["\"ยอครูไว้กลางหน้า ยอข้าเมื่อแล้วกิจ\" สอนว่าอย่างไร",["ควรยกย่องครูต่อหน้า และชมผู้ใต้บังคับบัญชาเมื่องานเสร็จ","ไม่ควรชมใคร","ชมครูลับหลัง","ชมข้าก่อนทำงาน"],0],
+["สุภาษิตพระร่วงจัดเป็นวรรณคดีประเภทใด",["วรรณคดีคำสอน","วรรณคดีนิราศ","บทละคร","วรรณคดีพิธีกรรม"],0],
+["\"อย่าเอาไม้ซีกไปงัดไม้ซุง\" มีความหมายว่าอะไร",["ผู้น้อยไม่ควรต่อสู้กับผู้มีอำนาจมากกว่า","ไม้ซีกแข็งแรงกว่า","ให้ตัดไม้","ห้ามทำงานไม้"],0],
+["ข้อใดเป็นการนำสุภาษิตพระร่วงไปใช้ได้เหมาะสม",["เตรียมอุปกรณ์ให้พร้อมก่อนไปเข้าค่าย","ทะเลาะกับเพื่อนเรื่องเล็ก","พูดจาดูถูกพ่อแม่","ไม่ทำงานที่ได้รับมอบหมาย"],0]]},
+{t:"บทละครพูดเรื่องเห็นแก่ลูก",th:"Hen Kae Luk",e:"🎭",v:["บทละครพูด","พระบาทสมเด็จพระมงกุฎเกล้าเจ้าอยู่หัว","พ่อพลาย","แม่ลออ","นายล้วน"],g:"วิเคราะห์ตัวละคร เนื้อหา และข้อคิดจากบทละครพูดเรื่องเห็นแก่ลูก",w:["ผู้แต่งและลักษณะบทละครพูด","ตัวละครสำคัญ","ข้อคิดเรื่องความรักของพ่อแม่"],q:[
+["ผู้ทรงพระราชนิพนธ์บทละครพูดเรื่องเห็นแก่ลูกคือใคร",["พระบาทสมเด็จพระมงกุฎเกล้าเจ้าอยู่หัว (รัชกาลที่ ๖)","สุนทรภู่","รัชกาลที่ ๒","กรมพระยาเดชาดิศร"],0],
+["บทละครพูดเรื่องเห็นแก่ลูกมีลักษณะอย่างไร",["ดำเนินเรื่องด้วยบทสนทนาของตัวละครเป็นร้อยแก้ว","แต่งเป็นโคลงทั้งเรื่อง","เป็นบทพากย์หนัง","เป็นนิราศ"],0],
+["ตัวละครที่เป็นลูกสาวในเรื่องชื่อว่าอะไร",["แม่ลออ","นางสุมาลี","แม่การะเกด","นางพิมพิลาไลย"],0],
+["พ่อพลายมาที่บ้านพระยาภักดีนฤนาถด้วยจุดประสงค์ใดในตอนแรก",["มาเพื่อขอพบลูกสาวและหวังผลประโยชน์","มาขอโทษ","มาส่งจดหมาย","มาเยี่ยมเพื่อน"],0],
+["ในตอนท้าย พ่อพลายตัดสินใจอย่างไร",["ไม่บอกความจริงว่าเป็นพ่อ เพื่อความสุขและอนาคตของลูก","พาลูกหนีไป","เปิดเผยว่าเป็นพ่อทันที","ฟ้องร้องเอาลูกคืน"],0],
+["ผู้ที่เลี้ยงดูแม่ลออจนเติบโตคือใคร",["พระยาภักดีนฤนาถ","พ่อพลาย","นายล้วน","พระไชยสุริยา"],0],
+["ข้อคิดสำคัญของเรื่องเห็นแก่ลูกคือข้อใด",["ความรักของพ่อแม่ที่ยอมเสียสละเพื่อลูก","เงินสำคัญกว่าความรัก","ควรโกหกเพื่อประโยชน์ตน","ไม่ควรมีลูก"],0],
+["นายล้วนในเรื่องมีความสัมพันธ์กับแม่ลอออย่างไร",["เป็นคู่หมั้น","เป็นพ่อ","เป็นพี่ชาย","เป็นครู"],0],
+["พ่อพลายเคยต้องโทษเพราะเหตุใด",["ทุจริตเงินหลวง","ช่วยคนตกน้ำ","ทำความดี","สอบตก"],0],
+["เรื่องเห็นแก่ลูกแสดงให้เห็นการเปลี่ยนแปลงนิสัยของพ่อพลายอย่างไร",["จากคนเห็นแก่ตัวกลายเป็นยอมเสียสละเพื่อลูก","จากคนดีกลายเป็นคนเลว","ไม่เปลี่ยนแปลงเลย","จากคนจนกลายเป็นเศรษฐี"],0],
+["ลักษณะเด่นของบทละครพูดคือข้อใด",["ใช้บทสนทนาโต้ตอบ เหมาะแก่การแสดง","ใช้แต่การบรรยาย","ต้องมีดนตรีปี่พาทย์ตลอด","ใช้ภาษาบาลีทั้งหมด"],0]]},
+{t:"นิราศภูเขาทอง",th:"Nirat Phu Khao Thong",e:"⛰️",v:["นิราศ","กลอนนิราศ","สุนทรภู่","วัดภูเขาทอง"],g:"สรุปเนื้อหา วิเคราะห์คุณค่าทางวรรณศิลป์และข้อคิดจากนิราศภูเขาทอง",w:["ลักษณะวรรณคดีนิราศ","เส้นทางการเดินทาง","คุณค่าด้านวรรณศิลป์และข้อคิด"],q:[
+["ผู้แต่งนิราศภูเขาทองคือใคร",["สุนทรภู่","รัชกาลที่ ๖","ศรีปราชญ์","เจ้าพระยาพระคลัง (หน)"],0],
+["นิราศภูเขาทองแต่งด้วยคำประพันธ์ประเภทใด",["กลอนนิราศ (กลอนสุภาพ)","โคลงสี่สุภาพ","กาพย์ยานี ๑๑","ร่ายสุภาพ"],0],
+["สุนทรภู่เดินทางไปนมัสการเจดีย์ภูเขาทองที่เมืองใด",["พระนครศรีอยุธยา","สุโขทัย","เชียงใหม่","นครปฐม"],0],
+["สุนทรภู่เดินทางในนิราศภูเขาทองด้วยพาหนะใด",["เรือ","ช้าง","รถไฟ","เกวียน"],0],
+["วรรณคดีประเภท 'นิราศ' มีลักษณะสำคัญอย่างไร",["เล่าการเดินทางและพรรณนาความรู้สึกคิดถึงผู้เป็นที่รัก","เป็นบทละครพูด","เป็นตำราแพทย์","เป็นกฎหมาย"],0],
+["ขณะแต่งนิราศภูเขาทอง สุนทรภู่มีสถานะใด",["บวชเป็นพระภิกษุ","เป็นทหาร","เป็นพ่อค้า","เป็นกษัตริย์"],0],
+["ข้อใดเป็นคุณค่าด้านวรรณศิลป์ของนิราศภูเขาทอง",["การเล่นสัมผัสและใช้ภาพพจน์ไพเราะ","ใช้ตัวเลขมาก","ไม่มีสัมผัส","ใช้ภาษาอังกฤษ"],0],
+["ในเรื่อง เมื่อถึงเจดีย์ภูเขาทอง สุนทรภู่พบสภาพเจดีย์เป็นอย่างไร",["ชำรุดทรุดโทรม","สร้างใหม่สวยงาม","ถูกน้ำท่วมมิด","ไม่มีเจดีย์"],0],
+["ข้อคิดจากนิราศภูเขาทองข้อใดเหมาะสม",["สิ่งทั้งหลายไม่เที่ยง ควรไม่ประมาทในชีวิต","ควรเที่ยวให้มาก","ทรัพย์สินจีรังยั่งยืน","ไม่ควรทำบุญ"],0],
+["นิราศภูเขาทองแต่งขึ้นในสมัยใด",["รัตนโกสินทร์ (รัชกาลที่ ๓)","สุโขทัย","อยุธยาตอนต้น","ธนบุรี"],0],
+["กลอนสุภาพ ๑ บท มีกี่วรรค",["๔ วรรค","๒ วรรค","๓ วรรค","๘ วรรค"],0]]},
+{t:"บทพากย์เอราวัณ",th:"Bot Phak Erawan",e:"🐘",v:["บทพากย์","ช้างเอราวัณ","อินทรชิต","พระราม","กาพย์ฉบัง ๑๖"],g:"วิเคราะห์ภาพพจน์และความงามทางภาษาในบทพากย์เอราวัณ",w:["ที่มาจากรามเกียรติ์","ผู้ทรงพระราชนิพนธ์","การพรรณนาช้างเอราวัณ"],q:[
+["บทพากย์เอราวัณเป็นพระราชนิพนธ์ของรัชกาลใด",["รัชกาลที่ ๒","รัชกาลที่ ๑","รัชกาลที่ ๕","รัชกาลที่ ๖"],0],
+["บทพากย์เอราวัณแต่งด้วยคำประพันธ์ประเภทใด",["กาพย์ฉบัง ๑๖","โคลงสี่สุภาพ","กลอนแปด","ร่ายยาว"],0],
+["บทพากย์เอราวัณมีที่มาจากวรรณคดีเรื่องใด",["รามเกียรติ์","ขุนช้างขุนแผน","พระอภัยมณี","อิเหนา"],0],
+["ใครแปลงกายเป็นพระอินทร์ทรงช้างเอราวัณ",["อินทรชิต","ทศกัณฐ์","หนุมาน","พระลักษมณ์"],0],
+["บทพากย์ใช้สำหรับการแสดงประเภทใด",["โขนและหนังใหญ่","ละครพูด","ลิเก","หมอลำ"],0],
+["ช้างเอราวัณในบทพากย์มีกี่เศียร",["๓๓ เศียร","๓ เศียร","๙ เศียร","๑๐๐ เศียร"],0],
+["บทพากย์เอราวัณโดดเด่นด้านใด",["การพรรณนาความงามของช้างเอราวัณอย่างละเอียด","การเล่าเรื่องตลก","การสอนคณิตศาสตร์","การบอกทาง"],0],
+["การใช้ภาพพจน์เปรียบสิ่งหนึ่งเหมือนอีกสิ่งหนึ่งโดยใช้คำ 'ดุจ ดัง เหมือน' เรียกว่าอะไร",["อุปมา","อุปลักษณ์","บุคคลวัต","อติพจน์"],0],
+["อินทรชิตแปลงกายเป็นพระอินทร์เพื่ออะไร",["ลวงกองทัพพระรามแล้วแผลงศรทำร้ายพระลักษมณ์","ไปเที่ยวสวรรค์","แต่งงาน","ช่วยพระราม"],0],
+["การกล่าวเกินจริงเพื่อเน้นความรู้สึก เรียกว่าภาพพจน์ใด",["อติพจน์","อุปมา","สัทพจน์","นามนัย"],0],
+["ข้อใดเป็นคุณค่าของบทพากย์เอราวัณ",["ให้ความรู้ทางวัฒนธรรมการแสดงโขนและความงามของภาษา","ให้ความรู้วิทยาศาสตร์","สอนการทำอาหาร","สอนกฎหมาย"],0]]},
+{t:"ชนิดและหน้าที่ของคำ",th:"Parts of Speech",e:"🔤",v:["คำนาม","คำสรรพนาม","คำกริยา","คำวิเศษณ์","คำบุพบท","คำสันธาน","คำอุทาน"],g:"วิเคราะห์ชนิดและหน้าที่ของคำในประโยคได้",w:["คำ ๗ ชนิด","หน้าที่ของคำในประโยค"],q:[
+["คำในภาษาไทยแบ่งออกเป็นกี่ชนิด (ตามหลักภาษาไทยแบบเรียน)",["๗ ชนิด","๕ ชนิด","๘ ชนิด","๑๐ ชนิด"],0],
+["\"แมวนอนบนโต๊ะ\" คำว่า 'บน' เป็นคำชนิดใด",["คำบุพบท","คำกริยา","คำนาม","คำสันธาน"],0],
+["\"เขาวิ่งเร็วมาก\" คำว่า 'เร็ว' เป็นคำชนิดใด",["คำวิเศษณ์","คำกริยา","คำนาม","คำบุพบท"],0],
+["\"ฉันและเพื่อนไปโรงเรียน\" คำว่า 'และ' เป็นคำชนิดใด",["คำสันธาน","คำบุพบท","คำสรรพนาม","คำวิเศษณ์"],0],
+["คำใดเป็นคำอุทาน",["โอ้โฮ","กิน","สวย","เพราะ"],0],
+["\"เธอเป็นนักเรียนดีเด่น\" คำว่า 'เธอ' เป็นคำชนิดใด",["คำสรรพนาม","คำนาม","คำกริยา","คำวิเศษณ์"],0],
+["คำใดเป็นคำนาม",["โรงเรียน","วิ่ง","อย่างไร","แต่"],0],
+["\"น้องร้องไห้เพราะหกล้ม\" คำว่า 'เพราะ' เป็นคำชนิดใด",["คำสันธาน","คำวิเศษณ์","คำกริยา","คำอุทาน"],0],
+["\"ฝูงนกบินกลับรัง\" คำกริยาในประโยคคือคำใด",["บิน","ฝูง","นก","รัง"],0],
+["\"ดอกไม้สีแดงสวยงาม\" คำว่า 'แดง' ทำหน้าที่ใด",["ขยายคำนาม","เป็นประธาน","เป็นกริยาหลัก","เชื่อมประโยค"],0],
+["คำลักษณนามของ 'ช้าง' คือข้อใด",["เชือก","ตัว","ลำ","คัน"],0]]},
+{t:"ภาษาพูด ภาษาเขียน และคำหลายความหมาย",th:"Spoken vs Written Thai",e:"🗣️",v:["ภาษาพูด","ภาษาเขียน","คำพ้อง","คำที่มีหลายความหมาย"],g:"ใช้ภาษาพูดและภาษาเขียนได้เหมาะสม และเข้าใจคำที่มีหลายความหมาย",w:["ความแตกต่างของภาษาพูด/ภาษาเขียน","คำพ้องรูป พ้องเสียง","คำหลายความหมายตามบริบท"],q:[
+["คำใดเป็นภาษาเขียนของคำว่า 'กิน' ในการเขียนรายงาน",["รับประทาน","ฟาด","ซัด","จัดการ"],0],
+["\"เดี๋ยวเจอกันนะ\" เป็นภาษาลักษณะใด",["ภาษาพูด","ภาษาเขียนทางการ","ภาษาบาลี","ภาษากฎหมาย"],0],
+["ภาษาเขียนที่เป็นทางการเหมาะกับสถานการณ์ใด",["การเขียนจดหมายถึงผู้อำนวยการ","คุยกับเพื่อนสนิท","ส่งข้อความหาน้อง","ตะโกนเชียร์กีฬา"],0],
+["คำที่เขียนเหมือนกันแต่อ่านต่างกันและความหมายต่างกัน เรียกว่าอะไร",["คำพ้องรูป","คำพ้องเสียง","คำพ้องความหมาย","คำซ้อน"],0],
+["\"เพลา\" อ่านได้ทั้ง 'เพ-ลา' (เวลา) และ 'เพลา' (แกนล้อ) เป็นคำประเภทใด",["คำพ้องรูป","คำพ้องเสียง","คำประสม","คำซ้ำ"],0],
+["'การ' กับ 'กาล' อ่านออกเสียงเหมือนกัน แต่เขียนและความหมายต่างกัน เรียกว่าอะไร",["คำพ้องเสียง","คำพ้องรูป","คำซ้อน","คำพ้องความหมาย"],0],
+["\"ขันน้ำ\" กับ \"ไก่ขัน\" คำว่า 'ขัน' เป็นคำลักษณะใด",["คำที่มีหลายความหมาย","คำซ้ำ","คำอุทาน","คำซ้อน"],0],
+["คำว่า 'ตัวเอง' ในภาษาพูดของวัยรุ่น ใช้เรียกใครได้",["คนที่คุยด้วย (บุรุษที่ ๒)","ผู้พูดเท่านั้น","คนที่ไม่อยู่","สัตว์เลี้ยง"],0],
+["ภาษาพูดในข้อใดควรเปลี่ยนเป็นภาษาเขียนก่อนใส่ในรายงาน",["เยอะมาก ๆ","จำนวนมาก","อย่างยิ่ง","ประมาณ"],0],
+["\"เขาเป็นคนหัวสูง\" คำว่า 'หัวสูง' มีความหมายอย่างไร",["ชอบทำตัวเหนือผู้อื่น/ทำตัวเกินฐานะ","ศีรษะใหญ่","ตัวสูง","ฉลาดมาก"],0],
+["คำใดเป็นภาษาเขียนของ 'ไม่เป็นไร' ในจดหมายทางการ",["ไม่เป็นปัญหาแต่อย่างใด","ช่างมัน","ชิลล์ ๆ","ไม่เป็นไรหรอก"],0]]},
+{t:"การอ่านจับใจความ การเขียน และสำนวนไทย",th:"Reading, Writing & Idioms",e:"✍️",v:["ใจความสำคัญ","ประโยคใจความ","ย่อความ","สำนวน","คำพังเพย"],g:"อ่านจับใจความ เขียนย่อความ และใช้สำนวนไทยได้ถูกต้อง",w:["การหาใจความสำคัญ","หลักการย่อความ","สำนวน สุภาษิต คำพังเพย"],q:[
+["ใจความสำคัญของย่อหน้ามักอยู่ที่ใด",["ประโยคใจความ (มักอยู่ต้นหรือท้ายย่อหน้า)","คำสุดท้ายเสมอ","ชื่อผู้เขียน","เลขหน้า"],0],
+["การย่อความที่ดีควรทำอย่างไร",["เก็บใจความสำคัญ ใช้ภาษาของตนเอง และสั้นกระชับ","คัดลอกทุกประโยค","เพิ่มความคิดเห็นส่วนตัวมาก ๆ","ใช้ภาษาพูด"],0],
+["สำนวน 'น้ำขึ้นให้รีบตัก' หมายถึงอะไร",["มีโอกาสควรรีบทำ","ให้ตักน้ำตอนเช้า","น้ำท่วมให้หนี","อย่าทำอะไรเลย"],0],
+["สำนวน 'ขี่ช้างจับตั๊กแตน' หมายถึงอะไร",["ลงทุนมากแต่ได้ผลตอบแทนน้อย","ทำงานเร็ว","จับสัตว์เก่ง","ชอบเลี้ยงช้าง"],0],
+["สำนวน 'ตำน้ำพริกละลายแม่น้ำ' หมายถึงอะไร",["ใช้จ่ายสิ่งที่มีอยู่น้อยไปกับสิ่งที่ไม่เกิดประโยชน์","ทำอาหารเก่ง","แม่น้ำสกปรก","ประหยัดมาก"],0],
+["สำนวน 'กินน้ำเห็นปลิง' หมายถึงอะไร",["รู้สึกไม่สบายใจเพราะรู้ข้อบกพร่องของสิ่งนั้น","ชอบดื่มน้ำ","กลัวปลิง","ดื่มน้ำสะอาด"],0],
+["สำนวน 'ไก่ได้พลอย' หมายถึงอะไร",["ได้ของมีค่าแต่ไม่รู้คุณค่า","ไก่ฉลาด","ร่ำรวย","โชคร้าย"],0],
+["ก่อนเขียนเรียงความ ควรทำสิ่งใดก่อน",["วางโครงเรื่อง","เขียนสรุปทันที","ตั้งชื่อเรื่องให้ยาวที่สุด","นับคำ"],0],
+["ส่วนประกอบของเรียงความมี ๓ ส่วน คือ คำนำ เนื้อเรื่อง และอะไร",["สรุป","บรรณานุกรม","สารบัญ","คำอุทิศ"],0],
+["การเขียนแสดงความคิดเห็นที่ดีควรมีลักษณะใด",["มีเหตุผลและข้อมูลสนับสนุน","ใช้คำหยาบ","ไม่มีเหตุผล","คัดลอกจากผู้อื่น"],0],
+["สำนวน 'ปิดทองหลังพระ' หมายถึงอะไร",["ทำความดีโดยไม่หวังให้ใครเห็นหรือยกย่อง","ทำงานผิดวิธี","ซ่อนทอง","ไหว้พระ"],0]]}
+];
+
+const EXTRA=[];
+L.forEach((l,i)=>{if(EXTRA[i])l.q.push(...EXTRA[i])});
+// positions (% of map)
+const P=[[6,40],[16,46],[25,40],[34,46],[42,38],[8,82],[18,88],[28,82],[37,88],[46,80],[58,46],[66,40],[74,46],[82,40],[90,46],[56,85],[65,90],[74,84],[83,90],[92,82]];
+const N=L.length;const BOSS=N>10?[{id:"b1",t:"BOSS 1",th:"สอบกลางภาค (ด่าน 1-10)",pos:[48,17],from:0},{id:"b2",t:"BOSS 2",th:"สอบปลายภาค (ด่าน 11-20)",pos:[93,17],from:10}]:[{id:"b1",t:"BOSS",th:`สอบรวม (ด่าน 1-${N})`,pos:[48,17],from:0}];
+const PID=localStorage.getItem("piyamit_pid")||"";let ME=null;
+const SUBJ=CFG.key;
+
+let S={s:{},coins:0,r:{}};
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||{s:{},coins:0}}catch(e){return{s:{},coins:0}}}
+function save(){}
+const stars=i=>S.s[i]||0;
+function unlocked(i){if(i<=0)return true;if(i===10&&N>10)return stars("b1")>0&&stars(9)>0;return stars(i-1)>0&&unlocked(i-1)}
+function bossUnlocked(b){for(let i=b.from;i<Math.min(N,b.from+10);i++)if(!stars(i))return false;return true}
+function st(n){let h='<span class="stars">';for(let k=0;k<3;k++)h+=k<n?'★':'<span class="off">★</span>';return h+'</span>'}
+const map=document.getElementById('map');
+function render(){
+ map.querySelectorAll('.node,.zone,.deco,svg').forEach(e=>e.remove());
+ const pts=[...P.slice(0,5),[50,63],...P.slice(5,10).reverse()];
+ const pts2=N<=10?[]:[...P.slice(10,15),[96,63],...P.slice(15,20).reverse()];
+ const path=a=>a.map((p,i)=>(i?'L':'M')+p[0]*10+' '+p[1]*5).join(' ');
+ map.insertAdjacentHTML('beforeend',`<svg class="path" viewBox="0 0 1000 500" preserveAspectRatio="none">
+ ${[pts,pts2].filter(a=>a.length).map(a=>`<path d="${path(a)}" fill="none" stroke="#f3d9a4" stroke-width="22" stroke-linejoin="round" stroke-linecap="round"/><path d="${path(a)}" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="10 10"/>`).join('')}
+ <path d="M${P[4][0]*10} ${P[4][1]*5} L480 85" stroke="#e57373" stroke-width="6" stroke-dasharray="6 8" fill="none"/>
+ ${N>10?`<path d="M${P[14][0]*10} ${P[14][1]*5} L930 85" stroke="#e57373" stroke-width="6" stroke-dasharray="6 8" fill="none"/>`:''}</svg>`);
+ const deco=[["🏰",2,12],["🎡",30,14],["🚌",22,62],["🌳",12,63],["🌴",40,64],["🏯",10,20],["🌉",30,58],["⛵",20,58],["✈️",60,15],["🏙️",68,16],["🗽",80,18],["🌋",52,8],["🌴",86,62],["🏝️",70,62],["🐘",3,62],["🌸",50,94],["🏟️",98,60]];
+ deco.forEach(d=>map.insertAdjacentHTML('beforeend',`<div class="deco" style="left:${d[1]}%;top:${d[2]}%">${d[0]}</div>`));
+ map.insertAdjacentHTML('beforeend',CFG.zones||`<div class="zone" style="left:8%;background:#1e5bb8">ช่วงที่ 1 : ก่อนสอบกลางภาค (ด่านที่ 1-10)<small>ทบทวนพื้นฐานและการสื่อสารในชีวิตประจำวัน</small></div>
+ <div class="zone" style="left:56%;background:#8e24aa">ช่วงที่ 2 : หลังสอบกลางภาค (ด่านที่ 11-20)<small>ไวยากรณ์ การอ่าน การเขียน และการสื่อสารในสถานการณ์ต่าง ๆ</small></div>`);
+ L.forEach((l,i)=>{const c=stars(i)?'done':unlocked(i)?'open':'locked';
+  map.insertAdjacentHTML('beforeend',`<div class="node ${c}" data-i="${i}" style="left:${P[i][0]}%;top:${P[i][1]}%"><div class="c">${c==='locked'?'🔒':i+1}</div>${st(stars(i))}<div class="lb">${l.e} ${l.t}<small>${l.th}</small></div></div>`)});
+ BOSS.forEach(b=>{const c=stars(b.id)?'done':bossUnlocked(b)?'open':'locked';
+  map.insertAdjacentHTML('beforeend',`<div class="node boss ${c}" data-b="${b.id}" style="left:${b.pos[0]}%;top:${b.pos[1]}%"><div class="c">${c==='locked'?'🔒':'👹'}</div>${st(stars(b.id))}<div class="lb">${b.t}<small>${b.th}</small></div></div>`)});
+ // header
+ const done=L.filter((_,i)=>stars(i)).length;let tot=0;L.forEach((_,i)=>tot+=stars(i));
+ const pc=Math.round(done/N*100);pb.style.width=pc+'%';pt.textContent=`${done}/${N} ด่าน (${pc}%)`;document.getElementById('st').textContent=tot+'/'+N*3;co.textContent=S.coins;
+ // table
+ const cur=L.findIndex((_,i)=>!stars(i)&&unlocked(i));
+ const row=i=>{const s=stars(i);const b=s?'<span class="badge b-done">ผ่านแล้ว</span>':i===cur?'<span class="badge b-cur">กำลังเรียน</span>':'<span class="badge b-no">ยังไม่เริ่ม</span>';
+  return `<div class="row" data-i="${i}"><b>${i+1}</b><span style="font-size:20px">${L[i].e}</span><div class="t">${L[i].t}<small>${L[i].th}</small><small class="desc">📌 ${L[i].g}</small><small class="desc2">📚 ${L[i].w.join(" · ")}</small></div>${b}${st(s)}</div>`};
+ const rng=(a,b)=>{let h='';for(let i=a;i<b;i++)h+=row(i);return h};
+ document.getElementById('table').innerHTML=CFG.units?CFG.units(rng):`<div class="unit" style="border-color:#1e88e5"><h3>📘 หน่วยที่ 1 ทบทวนพื้นฐานและการสื่อสารในชีวิตประจำวัน (ด่านที่ 1-5)</h3>${rng(0,5)}</div>
+ <div class="unit" style="border-color:#43a047"><h3>📗 หน่วยที่ 2 การใช้ภาษาในสถานการณ์ต่าง ๆ (ด่านที่ 6-10)</h3>${rng(5,10)}</div>
+ <div class="unit" style="border-color:#8e24aa"><h3>📕 หน่วยที่ 3 ไวยากรณ์ การอ่าน การเขียน และสังคมโลก (ด่านที่ 11-20)</h3><div class="u3"><div>${rng(10,15)}</div><div>${rng(15,20)}</div></div></div>`;
+}
+document.addEventListener('click',e=>{const n=e.target.closest('[data-i],[data-b]');if(!n||n.closest('#modal'))return;
+ if(n.dataset.b){const b=BOSS.find(x=>x.id===n.dataset.b);if(bossUnlocked(b))openBoss(b);else toast('🔒 ต้องผ่านด่านทั้ง 10 ด่านในช่วงนี้ก่อน');return}
+ const i=+n.dataset.i;if(i>=N)return;if(unlocked(i))openLesson(i);else toast('🔒 ต้องผ่านด่านก่อนหน้าก่อนนะ')});
+const modal=document.getElementById('modal'),card=document.getElementById('card');
+function closeM(){modal.classList.remove('show')}
+modal.addEventListener('click',e=>{if(e.target===modal)closeM()});
+function hdr(t,s,c){return `<div class="top" style="${c||''}"><button class="btn x" onclick="closeM()">✕</button><h2>${t}</h2><div>${s}</div></div>`}
+function openLesson(i){const l=L[i];
+ card.innerHTML=hdr(`${l.e} ด่านที่ ${i+1}: ${l.t}`,l.th)+`<div class="body">
+ <div class="box g1"><h4>🎯 เป้าหมายการเรียนรู้</h4><ul><li>${l.g}</li></ul></div>
+ <div class="box g2"><h4>📚 สิ่งที่จะได้เรียนรู้</h4><ul>${l.w.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+ <div class="box g3"><h4>🔤 คำศัพท์สำคัญ</h4><div class="vocab">${l.v.map(x=>`<span>${x}</span>`).join('')}</div></div>
+ <button class="btn go" id="start">🎮 เริ่มทำแบบทดสอบ (${Math.min(QN,l.q.length)} ข้อ จากคลัง ${l.q.length} ข้อ)</button></div>`;
+ modal.classList.add('show');start.onclick=()=>quiz(shuffle(l.q).slice(0,QN),i,`ด่านที่ ${i+1}: ${l.t}`)}
+function openBoss(b){const pool=[];for(let i=b.from;i<Math.min(N,b.from+10);i++)if(L[i])pool.push(L[i].q[Math.floor(Math.random()*L[i].q.length)]);
+ card.innerHTML=hdr(`👹 ${b.t}: ${b.th}`,'ตอบคำถามผสมจากทุกด่าน 10 ข้อ เพื่อพิชิตบอส!','background:linear-gradient(120deg,#b71c1c,#6a1b9a)')+`<div class="body"><div class="box g3"><h4>⚔️ กติกา</h4><ul><li>${pool.length} ข้อ จากด่าน ${b.from+1}-${b.from+pool.length}</li><li>ถูก 5 ข้อขึ้นไปเพื่อผ่าน</li><li>รางวัลเหรียญ x2</li></ul></div><button class="btn go" id="start">⚔️ ท้าสู้บอส!</button></div>`;
+ modal.classList.add('show');start.onclick=()=>quiz(shuffle(pool),b.id,`${b.t} – ${b.th}`)}
+const QN=10;
+// สับตัวเลือกแบบกำหนดได้ (deterministic) ต่อ ผู้เล่น+คำถาม: ลำดับคงที่เมื่อรีโหลด แต่ต่างกันในแต่ละคน
+function hash32(str){let h=2166136261>>>0;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)>>>0}return h}
+function mulberry32(a){return function(){a=(a+0x6D2B79F5)>>>0;let t=a;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296}}
+function seededShuffle(arr,seed){const a=[...arr],rnd=mulberry32(hash32(seed));for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function quiz(qs,id,title){let k=0,score=0;const boss=typeof id==='string';
+ const show=()=>{const q=qs[k];const opts=seededShuffle(q[1].map((o,j)=>({o,ok:j===q[2]})),PID+'|'+SUBJ+'|'+q[0]);
+  card.innerHTML=hdr(title,boss?'BOSS BATTLE':'แบบทดสอบ',boss?'background:linear-gradient(120deg,#b71c1c,#6a1b9a)':'')+`<div class="body"><div class="qp"><span>ข้อ ${k+1}/${qs.length}</span><span>✅ ${score}</span></div><div class="pbar" style="width:100%"><i style="width:${k/qs.length*100}%"></i></div><div class="q">${q[0]}</div><div class="opts">${opts.map((o,j)=>`<button class="btn opt" data-ok="${o.ok}">${'ABCD'[j]}. ${o.o}</button>`).join('')}</div></div>`;
+  card.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{const ok=b.dataset.ok==='true';if(ok)score++;
+   card.querySelectorAll('.opt').forEach(x=>{x.disabled=true;if(x.dataset.ok==='true')x.classList.add('ok')});if(!ok)b.classList.add('bad');
+   setTimeout(()=>{k++;k<qs.length?show():result()},700)})};
+ const result=()=>{const r=score/qs.length;const s=r>=.9?3:r>=.7?2:r>=.5?1:0;const coins=score*10*(boss?2:1)+s*5;api("result",{pid:PID,subj:SUBJ,base:String(id),score,total:qs.length,stars:s,coins:s?coins:0}).then(p=>{S=p;render()}).catch(e=>toast("⚠️ บันทึกคะแนนไม่สำเร็จ ตรวจสอบการเชื่อมต่อ"));
+  if(s){if(s>stars(id))S.s[id]=s;S.coins+=coins;save();render();confetti()}
+  card.innerHTML=hdr(title,'ผลการทดสอบ')+`<div class="body res"><div class="big">${st(s).replace('stars','stars" style="font-size:56px')}</div><h2>${s?'เยี่ยมมาก! ผ่านด่านแล้ว 🎉':'ยังไม่ผ่าน ลองอีกครั้งนะ 💪'}</h2><p>ตอบถูก ${score}/${qs.length} ข้อ ${s?`· ได้รับ 🪙 ${coins} เหรียญ`:'(ต้องถูกอย่างน้อย 50%)'}</p>${nextBtn(id,s)}<button class="btn go" style="background:#5c6bc0;box-shadow:0 4px 0 #303f9f;margin-top:8px" onclick="closeM()">🗺️ กลับไปที่แผนที่</button></div>`;
+  const nb=card.querySelector('#nextb');if(nb)nb.onclick=()=>{const a=nb.dataset.a;if(a==='retry')boss?openBoss(BOSS.find(x=>x.id===id)):openLesson(id);else if(a[0]==='b')openBoss(BOSS.find(x=>x.id===a));else openLesson(+a)}};
+ show()}
+function nextBtn(id,s){if(!s)return '<button class="btn go" id="nextb" data-a="retry">🔁 ลองอีกครั้ง</button>';
+ let a=null,lab='';if(typeof id==='number'){const b=BOSS.find(x=>Math.min(N,x.from+10)-1===id);if(b&&bossUnlocked(b)&&!stars(b.id)){a=b.id;lab='👹 ไปสู้บอส'}else if(id+1<N&&unlocked(id+1)){a=id+1;lab=`▶ ไปด่านที่ ${id+2}`}}
+ else{const bi=BOSS.findIndex(x=>x.id===id);const n=BOSS[bi].from+10;if(n<N&&unlocked(n)){a=n;lab=`▶ ไปด่านที่ ${n+1}`}}
+ return a===null?'<div style="margin:8px 0;font-weight:600">🏁 จบทุกด่านในวิชานี้แล้ว! ยอดเยี่ยมมาก</div>':`<button class="btn go" id="nextb" data-a="${a}">${lab}</button>`}
+function toast(m){const t=document.createElement('div');t.textContent=m;t.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 18px;border-radius:12px;z-index:70';document.body.appendChild(t);setTimeout(()=>t.remove(),1800)}
+function confetti(){const c=document.getElementById('confetti'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;
+ const p=Array.from({length:150},()=>({x:Math.random()*c.width,y:-20-Math.random()*c.height/2,v:2+Math.random()*4,s:5+Math.random()*6,c:`hsl(${Math.random()*360},90%,60%)`,r:Math.random()*6}));let f=0;
+ (function a(){x.clearRect(0,0,c.width,c.height);p.forEach(q=>{q.y+=q.v;q.r+=.1;x.fillStyle=q.c;x.save();x.translate(q.x+Math.sin(q.r)*10,q.y);x.rotate(q.r);x.fillRect(-q.s/2,-q.s/2,q.s,q.s*.6);x.restore()});if(++f<150)requestAnimationFrame(a);else x.clearRect(0,0,c.width,c.height)})()}
+document.getElementById('reset').onclick=()=>{if(confirm('รีเซ็ตความคืบหน้าทั้งหมด?')){api('reset',{pid:PID,subj:SUBJ}).then(p=>{S=p;render()})}};
+if(!PID)location.replace("index.html?need=1");else Promise.all([api("players"),api("progress",{pid:PID,subj:SUBJ})]).then(([pl,p])=>{ME=pl.players.find(x=>x.id===PID);if(!ME){localStorage.removeItem("piyamit_pid");location.replace("index.html?need=1");return}S=p;render();document.querySelector("header").insertAdjacentHTML("beforeend",`<a class="stat" href="index.html" style="text-decoration:none" title="เปลี่ยนผู้เล่น">👤 ${ME.nick||ME.name} · ${ME.cls||""}</a>`)}).catch(e=>{document.body.insertAdjacentHTML("afterbegin","<div style=\"background:#c62828;color:#fff;padding:10px;text-align:center\">⚠️ เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ — ลองรีเฟรชหน้า</div>")});
+</script></body></html>
